@@ -39,11 +39,13 @@ store.on('error', function(error) {
 
 const app = express();
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', "https://khello-sata-mw8j7wla2-aka5h14s-projects.vercel.app/"],
   credentials: true
 }
 ));
+
 app.use(express.json());
+
 app.use(bodyParser.urlencoded({ extended: false 
 }));
 
