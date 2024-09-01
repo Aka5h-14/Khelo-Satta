@@ -2,6 +2,7 @@
 import { useRef,useContext } from "react";
 import context from "./MyContext";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import { Link,useNavigate } from "react-router-dom";
 
 
@@ -18,11 +19,13 @@ export default function Signin() {
     const phoneNumber = phoneNumberInputRef.current.value;
     const password = passwordInputRef.current.value;
 
-    const send = await axios.post("http://localhost:3000/signin", {
+    const send = await axios.post("https://khello-sata.vercel.app/signin", {
 
       phoneNumber: phoneNumber,
       password: password
       
+    }, {
+      withCredentials: true
     });
     if("msg" in send.data){
       navigate("/mines");

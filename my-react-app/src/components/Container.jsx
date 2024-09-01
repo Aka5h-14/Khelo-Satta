@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useContext } from "react";
 import Mines from "./Mines";
 import context from "./MyContext";
-import axios from "axios";
 
 function Container() {
   const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);

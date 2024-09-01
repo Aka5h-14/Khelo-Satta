@@ -32,7 +32,7 @@ export default function Navbar() {
 
   async function logOut() {
     const send = await axios.post(
-      "http://localhost:3000/signOut",
+      "https://khello-sata.vercel.app/signOut",
       {},
       { withCredentials: true }
     );

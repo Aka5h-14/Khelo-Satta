@@ -1,12 +1,10 @@
-import Bet from "./components/Bet";
-import Container from "./components/Container";
 import context from "./components/MyContext";
 import Navbar from "./components/Navbar";
-import BasicLineChart from "./components/Chart";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
 import "./App.css";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Game from "./components/Game";
@@ -33,35 +31,45 @@ function App() {
   };
 
   async function sendData() {
-    const data = await axios.get("http://localhost:3000/sendData", {});
+    const data = await axios.get("https://khello-sata.vercel.app/sendData", {}, {
+      withCredentials: true         // Ensures cookies are sent with the request
+    });
     return data.data;
   }
 
   async function getAmount() {
-    const data = await axios.get("http://localhost:3000/getAmount", {});
+    const data = await axios.get("https://khello-sata.vercel.app/getAmount", {}, {
+      withCredentials: true         // Ensures cookies are sent with the request
+    });
     setCash(data.data.balance);
   }
 
   async function uploadAmount(AMOUNT) {
-    const data = await axios.post("http://localhost:3000/updateUser", {
+    const data = await axios.post("https://khello-sata.vercel.app/updateUser", {
       money: AMOUNT,
+    }, {
+      withCredentials: true         // Ensures cookies are sent with the request
     });
     return data.data;
   }
 
   async function uploadData(AMOUNT, BET) {
-    const data = await axios.post("http://localhost:3000/updateBooks", {
+    const data = await axios.post("https://khello-sata.vercel.app/updateBooks", {
       amount: AMOUNT,
       bet: BET,
+    }, {
+      withCredentials: true         // Ensures cookies are sent with the request
     });
     return data.data;
   }
 
   async function requests() {
-    const ready = await axios.get("http://localhost:3000/play", {
+    const ready = await axios.get("https://khello-sata.vercel.app/play", {
       params: {
         mines: mines,
       },
+    }, {
+      withCredentials: true         // Ensures cookies are sent with the request
     });
     setClickedIndices([]);
     setgameOver(false);

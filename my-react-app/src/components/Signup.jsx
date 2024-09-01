@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs"
 import { useRef } from "react";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import { useNavigate } from "react-router-dom";
 
 const numSaltRounds = 8;
@@ -21,7 +22,7 @@ export default function Signup() {
 
     const hashedPassword = bcrypt.hashSync(password, numSaltRounds);
 
-    const send = await axios.post("http://localhost:3000/signup", {
+    const send = await axios.post("https://khello-sata.vercel.app/signup", {
         name: name,
         phoneNumber: phoneNumber,
         password: hashedPassword,

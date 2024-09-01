@@ -1,6 +1,7 @@
 import React, { useCallback, useContext } from "react";
 import context from "./MyContext";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import diamond from "../assets/diamond.png";
 import bomb from "../assets/bomb.png";
 
@@ -40,30 +41,13 @@ function Mine(props) {
     }
   };
 
-  // const handleSetArray = async () => {
-  //   let obj = await sendData();
-  //   setArray([...obj.array]);
-  // };
-
-  // // useEffect(()=>{
-  // //    handleSetArray();
-  // // },[gameOver])
-
-  // async function sendData () {
-  //   const data = await axios.get("http://localhost:3000/sendData", {
-  //     // headers: {
-  //     //   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2YzliZWIxMTU1M2RhNDc5MjdkZjE2ZiIsInBob25lTnVtYmVyIjoiOTAxOTAxOTAxIiwiaWF0IjoxNzI0NDk5MTg3fQ.zkc9UE0FzJ4WZ7UAEqWtWsXSLbDQA2y49W0VhI0vfj8"
-  //     // }
-  //   });
-
-  //   return data.data;
-  // }
-
   async function clickReq(data) {
-    const block = await axios.get("http://localhost:3000/minesClick", {
+    const block = await axios.get("https://khello-sata.vercel.app/minesClick", {
       params: {
         index: data,
       },
+    }, {
+      withCredentials: true         // Ensures cookies are sent with the request
     });
 
     return block.data;
