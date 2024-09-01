@@ -8,7 +8,7 @@ import { Link,useNavigate } from "react-router-dom";
 
 export default function Signin() {
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
   const phoneNumberInputRef = useRef();
   const passwordInputRef = useRef();
@@ -19,7 +19,7 @@ export default function Signin() {
     const phoneNumber = phoneNumberInputRef.current.value;
     const password = passwordInputRef.current.value;
 
-    const send = await axios.post("https://khello-sata.vercel.app/signin", {
+    const send = await axios.post(API+"signin", {
 
       phoneNumber: phoneNumber,
       password: password

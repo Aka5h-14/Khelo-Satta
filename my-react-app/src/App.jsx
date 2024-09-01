@@ -25,27 +25,30 @@ function App() {
   const [bet, setBet] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const API = "https://khello-sata.vercel.app/";
+  // const API = "http://localhost:3000/";
+
   const handleSetArray = async () => {
     let obj = await sendData();
     setArray([...obj.array]);
   };
 
   async function sendData() {
-    const data = await axios.get("https://khello-sata.vercel.app/sendData", {}, {
+    const data = await axios.get(API+"sendData", {}, {
       withCredentials: true         // Ensures cookies are sent with the request
     });
     return data.data;
   }
 
   async function getAmount() {
-    const data = await axios.get("https://khello-sata.vercel.app/getAmount", {}, {
+    const data = await axios.get(API+"getAmount", {}, {
       withCredentials: true         // Ensures cookies are sent with the request
     });
     setCash(data.data.balance);
   }
 
   async function uploadAmount(AMOUNT) {
-    const data = await axios.post("https://khello-sata.vercel.app/updateUser", {
+    const data = await axios.post(API+"updateUser", {
       money: AMOUNT,
     }, {
       withCredentials: true         // Ensures cookies are sent with the request
@@ -54,7 +57,7 @@ function App() {
   }
 
   async function uploadData(AMOUNT, BET) {
-    const data = await axios.post("https://khello-sata.vercel.app/updateBooks", {
+    const data = await axios.post(API+"updateBooks", {
       amount: AMOUNT,
       bet: BET,
     }, {
@@ -64,7 +67,7 @@ function App() {
   }
 
   async function requests() {
-    const ready = await axios.get("https://khello-sata.vercel.app/play", {
+    const ready = await axios.get(API+"play", {
       params: {
         mines: mines,
       },
@@ -104,6 +107,7 @@ function App() {
         bet,
         setBet,
         isAuthenticated, setIsAuthenticated,
+        API,
         handleSetArray,
         uploadAmount,
         uploadData,
