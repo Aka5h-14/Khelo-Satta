@@ -26,8 +26,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // const API = "https://khelo-satta-back.vercel.app/";
-  const API = "https://khelo-satta.onrender.com/";
-  // const API = "http://localhost:3000/";
+  // const API = "https://khelo-satta.onrender.com/";
+  const API = "http://localhost:3000/";
 
   const handleSetArray = async () => {
     let obj = await sendData();
@@ -35,24 +35,18 @@ function App() {
   };
 
   async function sendData() {
-    const data = await axios.get(API+"sendData", {}, {
-      withCredentials: true         // Ensures cookies are sent with the request
-    });
+    const data = await axios.get(API+"sendData", {},  );
     return data.data;
   }
 
   async function getAmount() {
-    const data = await axios.get(API+"getAmount", {}, {
-      withCredentials: true         // Ensures cookies are sent with the request
-    });
+    const data = await axios.get(API+"getAmount", {},  );
     setCash(data.data.balance);
   }
 
   async function uploadAmount(AMOUNT) {
     const data = await axios.post(API+"updateUser", {
       money: AMOUNT,
-    }, {
-      withCredentials: true         // Ensures cookies are sent with the request
     });
     return data.data;
   }
@@ -61,9 +55,7 @@ function App() {
     const data = await axios.post(API+"updateBooks", {
       amount: AMOUNT,
       bet: BET,
-    }, {
-      withCredentials: true         // Ensures cookies are sent with the request
-    });
+    },  );
     return data.data;
   }
 
@@ -72,9 +64,7 @@ function App() {
       params: {
         mines: mines,
       },
-    }, {
-      withCredentials: true         // Ensures cookies are sent with the request
-    });
+    },  );
     setClickedIndices([]);
     setgameOver(false);
     return ready.data;

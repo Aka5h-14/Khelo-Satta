@@ -2,7 +2,7 @@
 import { useRef,useContext } from "react";
 import context from "./MyContext";
 import axios from "axios";
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 import { Link,useNavigate } from "react-router-dom";
 
 

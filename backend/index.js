@@ -6,17 +6,6 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 
 
-const getAmount = require("./routes/getAmount");
-const minesClick = require("./routes/minesClick");
-const play = require("./routes/play");
-const sendData = require("./routes/sendData");
-const signin = require("./routes/signin");
-const signOut = require("./routes/signOut");
-const signup = require("./routes/signup");
-const updateBooks = require("./routes/updateBooks");
-const updateUser = require("./routes/updateUser");
-
-
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL,
   databaseName: 'mines',
@@ -35,6 +24,7 @@ app.use(cors({
 }
 ));
 
+
 app.use(express.json());
 
 app.use(bodyParser.urlencoded({ extended: false 
@@ -47,12 +37,21 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true,
-    sameSite: 'none', 
     maxAge: 60000 * 60
   },
   store: store,
 
 }));
+
+const getAmount = require("./routes/getAmount");
+const minesClick = require("./routes/minesClick");
+const play = require("./routes/play");
+const sendData = require("./routes/sendData");
+const signin = require("./routes/signin");
+const signOut = require("./routes/signOut");
+const signup = require("./routes/signup");
+const updateBooks = require("./routes/updateBooks");
+const updateUser = require("./routes/updateUser");
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 

@@ -47,9 +47,7 @@ function Mine(props) {
       params: {
         index: data,
       },
-    }, {
-      withCredentials: true         // Ensures cookies are sent with the request
-    });
+    },  );
 
     return block.data;
   }
