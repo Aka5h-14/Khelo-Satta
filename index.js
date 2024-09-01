@@ -6,15 +6,15 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 
 
-const getAmount = require("../routes/getAmount");
-const minesClick = require("../routes/minesClick");
-const play = require("../routes/play");
-const sendData = require("../routes/sendData");
-const signin = require("../routes/signin");
-const signOut = require("../routes/signOut");
-const signup = require("../routes/signup");
-const updateBooks = require("../routes/updateBooks");
-const updateUser = require("../routes/updateUser");
+const getAmount = require("./routes/getAmount");
+const minesClick = require("./routes/minesClick");
+const play = require("./routes/play");
+const sendData = require("./routes/sendData");
+const signin = require("./routes/signin");
+const signOut = require("./routes/signOut");
+const signup = require("./routes/signup");
+const updateBooks = require("./routes/updateBooks");
+const updateUser = require("./routes/updateUser");
 
 
 const store = new MongoDBStore({
