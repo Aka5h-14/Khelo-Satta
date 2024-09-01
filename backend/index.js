@@ -30,7 +30,7 @@ store.on('error', function(error) {
 
 const app = express();
 app.use(cors({
-  origin: ['http://localhost:5173'],
+  origin: ['https://khelo-satta.vercel.app/'],
   credentials: true
 }
 ));
