@@ -1,6 +1,7 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require('cors');
+// const cookie = require('cookie-parser')
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
@@ -35,9 +36,9 @@ app.use(session({
   saveUninitialized: false,
   resave: false,
   cookie: {
-    httpOnly: true,
+    // httpOnly: true,
     // secure: true,
-    sameSite: 'none',
+    sameSite: 'lax',
     maxAge: 60000 * 60
   },
   store: store,
