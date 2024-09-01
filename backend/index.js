@@ -17,6 +17,10 @@ const updateBooks = require("./routes/updateBooks");
 const updateUser = require("./routes/updateUser");
 
 
+const bcrypt = require('bcryptjs');
+const {user} = require('./db');
+const {schema2} = require('./test');
+
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL,
   databaseName: 'mines',
