@@ -24,8 +24,6 @@ export default function Signin() {
       phoneNumber: phoneNumber,
       password: password
       
-    }, {
-      withCredentials: true
     });
     if("msg" in send.data){
       navigate("/mines");

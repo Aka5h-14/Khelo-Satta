@@ -1,4 +1,13 @@
 {
+  "name": "khelo_satta",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.2",

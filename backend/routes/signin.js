@@ -26,12 +26,12 @@ router.post("/signin", async function(req,res){
       session.UserId=users._id;
       session.save();
 
-      res.cookie('session_token', session.id, {
-        httpOnly: true,          // Prevents JavaScript access
-        secure: true,            // Ensures the cookie is sent only over HTTPS
-        sameSite: 'none',        // Allows cross-site requests
-        maxAge: 60000 * 60, 
-    });
+    //   res.cookie('session_token', session.id, {
+    //     httpOnly: true,          // Prevents JavaScript access
+    //     secure: true,            // Ensures the cookie is sent only over HTTPS
+    //     sameSite: 'none',        // Allows cross-site requests
+    //     maxAge: 60000 * 60, 
+    // });
 
       res.status(200).send({
         msg:"signed in",
