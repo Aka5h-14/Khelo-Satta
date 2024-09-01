@@ -26,13 +26,13 @@ function classNames(...classes) {
 
 export default function Navbar() {
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
  
   const navigate = useNavigate();
 
   async function logOut() {
     const send = await axios.post(
-      "https://khello-sata.vercel.app/signOut",
+      API+"signOut",
       {},
       { withCredentials: true }
     );

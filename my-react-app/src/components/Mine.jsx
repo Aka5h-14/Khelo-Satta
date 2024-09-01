@@ -27,6 +27,7 @@ function Mine(props) {
     setClickedIndices,
     bet,
     setBet,
+    API,
     handleSetArray,
     uploadAmount,
     uploadData,
@@ -42,7 +43,7 @@ function Mine(props) {
   };
 
   async function clickReq(data) {
-    const block = await axios.get("https://khello-sata.vercel.app/minesClick", {
+    const block = await axios.get(API+"minesClick", {
       params: {
         index: data,
       },

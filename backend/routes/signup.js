@@ -1,7 +1,6 @@
 const { Router } = require("express");
 const {user} = require('../db');
 const {schema} = require('../test');
-// const { authentification } = require("./authen");
 const router = Router();
 
 router.post("/signup", async function(req,res){

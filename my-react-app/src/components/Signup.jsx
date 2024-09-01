@@ -7,6 +7,9 @@ import { useNavigate } from "react-router-dom";
 const numSaltRounds = 8;
 
 export default function Signup() {
+
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+
   const navigate= useNavigate();
 
   const nameInputRef = useRef();
@@ -22,13 +25,13 @@ export default function Signup() {
 
     const hashedPassword = bcrypt.hashSync(password, numSaltRounds);
 
-    const send = await axios.post("https://khello-sata.vercel.app/signup", {
+    const send = await axios.post(API+"signup", {
         name: name,
         phoneNumber: phoneNumber,
         password: hashedPassword,
-        email: email
-      
+        email: email  
     });
+
     if("msg" in send.data){
       navigate("/");
     }
