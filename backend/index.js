@@ -30,7 +30,7 @@ store.on('error', function(error) {
 
 const app = express();
 app.use(cors({
-  origin: ['https://khelo-satta.vercel.app'],
+  origin: 'https://khelo-satta.vercel.app',
   credentials: true
 }
 ));
@@ -47,7 +47,6 @@ app.use(session({
   cookie: {
     httpOnly: true,
     secure: true, 
-    sameSite: 'none',
     maxAge: 60000 * 60
   },
   store: store,
