@@ -25,7 +25,7 @@ function App() {
   const [bet, setBet] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const API = "khelo-satta-back.vercel.app/";
+  const API = "https://khelo-satta-back.vercel.app/";
   // const API = "http://localhost:3000/";
 
   const handleSetArray = async () => {
