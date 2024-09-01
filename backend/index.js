@@ -1,7 +1,7 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require('cors');
-// const cookie = require('cookie-parser')
+// const cookieParser = require('cookie-parser')
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
@@ -24,7 +24,6 @@ app.use(cors({
   credentials: true
 }
 ));
-
 
 app.use(express.json());
 
