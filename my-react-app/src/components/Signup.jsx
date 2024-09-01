@@ -30,7 +30,7 @@ export default function Signup() {
       
     });
     if("msg" in send.data){
-      navigate("/mines");
+      navigate("/");
     }
     else{
       alert("signup failed")
