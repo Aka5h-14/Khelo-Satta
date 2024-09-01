@@ -30,10 +30,13 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false 
 }));
 
+app.enable('trust proxy')
+
 app.use(session({
   secret: 'mines', 
   saveUninitialized: false,
   resave: false,
+  proxy: true,
   cookie: {
     // httpOnly: true,
     secure: true,
