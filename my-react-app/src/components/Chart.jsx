@@ -21,7 +21,7 @@ export default function BasicLineChart() {
   return (
     // <div className="w-full max-w-2xl h-auto">
       <LineChart
-        xAxis={[{ xAxisId: 'linearAxis', data: Xaxis }]}
+        xAxis={[{ data: Xaxis }]}
         series={[
           {
             data: Yaxis,

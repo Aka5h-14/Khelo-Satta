@@ -1,6 +1,7 @@
 import Mine from "./Mine";
 import context from './MyContext';
 import { useContext , useEffect } from "react";
+// import Popup from "./Popup";
 
 
 function Mines() {
@@ -17,7 +18,7 @@ function Mines() {
 
   return (
     <>
-    <div className="mx-auto w-80 xg:w-96 mt-10 p-5 rounded grid grid-cols-5 gap-5 bg-slate-600">
+    <div className="mx-auto w-80 xg:w-96 p-5 rounded grid grid-cols-5 gap-5 bg-slate-600">
       {array.map((block, index) => (
         <Mine
           key={index}
@@ -29,6 +30,7 @@ function Mines() {
         ></Mine>
       ))}
     </div>
+    {/* <Popup/> */}
     <p className="text-red-600">{gameOver ? "game over" :""}</p>
     </>
   );

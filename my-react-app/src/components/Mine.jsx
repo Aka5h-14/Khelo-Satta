@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import context from "./MyContext";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -34,6 +34,8 @@ function Mine(props) {
     requests,
   } = useContext(context);
 
+  const [isLoading, setisLoading]= useState(false);
+
   const handleSetValue = (index, newValue) => {
     const newArray = [...array];
     newArray[index] = newValue;
@@ -47,15 +49,16 @@ function Mine(props) {
       params: {
         index: data,
       },
-    },  );
+    });
 
     return block.data;
   }
 
-  const handleClick = useCallback(async (data) => {
-    if (gameOver) {
+  async function handleClick (data) {
+    if(gameOver) {
       return;
     }
+    setisLoading(true);
 
     if (!clickedIndices.includes(data)) {
       setClickedIndices([...clickedIndices, data]);
@@ -64,18 +67,25 @@ function Mine(props) {
     }
 
     const box = await clickReq(data);
+    setMultiply(box.multiplier);
 
-    handleSetValue(data, box.block);
+    setTimeout(async()=>{
+      setisLoading(false)
+      handleSetValue(data, box.block);
+    },1000);
+
 
     if (box.maxWin) {
-      await uploadData(money * multiply, money);
-      // let money=+cash + +(money*multiply);
-      // console.log(money)
-      await uploadAmount(+cash + +(money * multiply));
+      // console.log(money," ",multiply)
+      let a = (money * (box.multiplier)).toFixed(4);
+      await uploadData(+a, money);
+      let b = (+cash) + (+a);
+      await uploadAmount(+b);
       handleSetArray();
       setgameOver(true);
-      setCash(+cash + +(money * multiply));
-      setProfit(+profit + +(money * multiply));
+
+      setCash(+cash + (+a));
+      setProfit(+profit + ((+a)-money));
       setMoney(0);
     }
 
@@ -83,19 +93,18 @@ function Mine(props) {
       // db call to deduct money
       await uploadData(-money, money);
       await uploadAmount(+cash);
-      handleSetArray();
       setgameOver(true);
-      setProfit(+profit - +money);
+      handleSetArray();
+      setProfit(profit - money);
       setMoney(0);
-    } else {
-      setMultiply(box.multiplier);
+      setMultiply(1);
     }
-  });
+  };
 
   return (
     <>
       <div
-        className={`w-12 h-12 xg:w-14 xg:h-14 text-center rounded flex items-center justify-center bg-slate-400 
+        className={`w-12 h-12 xg:w-14 xg:h-14 text-center rounded flex items-center justify-center bg-slate-400 hover:scale-105 ${isLoading? 'animate-grow-shrink':''}
           //  
           //   clickedIndices.includes(props.index)
           //     ? props.block == 1
