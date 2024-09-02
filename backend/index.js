@@ -39,8 +39,8 @@ app.use(session({
   proxy: true,
   cookie: {
     // httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    // secure: true,
+    // sameSite: 'none',
     domain:'khelo-satta.vercel.app',
     maxAge: 60000 * 60
   },
