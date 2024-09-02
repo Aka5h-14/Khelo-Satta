@@ -41,6 +41,7 @@ app.use(session({
     // httpOnly: true,
     secure: true,
     sameSite: 'none',
+    domain:'.vercel.app',
     maxAge: 60000 * 60
   },
   store: store,
