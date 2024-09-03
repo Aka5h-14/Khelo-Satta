@@ -94,13 +94,12 @@ function Mine(props) {
           }
           setClickedIndices((prev) => [...prev, data]);
           setMultiply(box.multiplier);
-          setDabba(box.block);
-
+          
           // Simulate a delay for UI purposes
           await new Promise((resolve) => setTimeout(resolve, 1000));
+          setDabba(box.block);
             setisLoading(false);
             handleSetValue(data, box.block);
-            console.log(array);
 
           // Handle success or failure of the box result
           if (box.maxWin) {

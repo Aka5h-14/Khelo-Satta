@@ -20,7 +20,7 @@ export default function BasicLineChart() {
 
   return (
     // <div className="w-full max-w-2xl h-auto">
-      <LineChart
+      <LineChart className='bg-slate-200 mx-auto mt-3'
         xAxis={[{ data: Xaxis }]}
         series={[
           {

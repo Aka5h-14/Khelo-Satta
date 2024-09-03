@@ -6,9 +6,32 @@ import { useContext , useEffect } from "react";
 
 function Mines() {
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,
-    // dabba, setDabba,
-      API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  const { array,
+    setArray,
+    cash,
+    setCash,
+    money,
+    setMoney,
+    profit,
+    setProfit,
+    play,
+    setPlay,
+    mines,
+    setMines,
+    gameOver,
+    setgameOver,
+    multiply,
+    setMultiply,
+    clickedIndices,
+    setClickedIndices,
+    bet,
+    setBet,
+    isAuthenticated, setIsAuthenticated,
+    API,
+    handleSetArray,
+    uploadAmount,
+    uploadData,
+    requests,  } = useContext(context);
   
 
   useEffect(() => {
@@ -34,8 +57,10 @@ function Mines() {
         ></Mine>
       ))}
     </div>
-    {/* <Popup/> */}
-    <p className="text-red-600">{gameOver ? "game over" :""}</p>
+    {
+      gameOver==true ? <p className="text-red-600">game over</p> : ""
+    }
+    
     </>
   );
 }

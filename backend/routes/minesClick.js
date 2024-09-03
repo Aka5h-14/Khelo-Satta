@@ -3,8 +3,7 @@ const { authentification } = require("../middleware/authen");
 const router = Router();
 
 router.get("/minesClick", authentification, async function (req, res) {
-
-  console.log(req.session.gameState.gameOver);
+  
   if (!req.session.gameState.gameOver) {
     const Clickedindex = req.query.index;
 

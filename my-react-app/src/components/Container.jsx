@@ -3,7 +3,7 @@ import Mines from "./Mines";
 import context from "./MyContext";
 
 function Container() {
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated,isEnd, setisEnd, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
   function next() {
     if (money == 0) {
@@ -25,9 +25,11 @@ function Container() {
     if (clickedIndices.length == 0) {
       return;
     }
+    await new Promise((resolve) => setTimeout(resolve, 900));
 
     if (!gameOver) {
       setgameOver(true);
+      
       await uploadAmount(+((cash + (money * multiply)).toFixed(4)));
 
       await uploadData(+((money * multiply).toFixed(4)), money);
@@ -42,7 +44,7 @@ function Container() {
 
   return (
     <>
-      <div className="bg-slate-700 p-5 pt-8">
+      <div className="bg-slate-700 p-5 pt-8  border-b-2 border-white">
         <Mines />
         <div className="flex justify-evenly pt-5 text-xs xg:text-base md:text-lg"> 
           <p className="border-2 border-black bg-slate-600 text-white p-2 ">Multplier = {multiply}</p>
