@@ -6,7 +6,9 @@ import { useContext , useEffect } from "react";
 
 function Mines() {
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,
+    // dabba, setDabba,
+      API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
   
 
   useEffect(() => {
@@ -24,6 +26,8 @@ function Mines() {
           key={index}
           index={index}
           block={block}
+          // dabba={dabba}
+          // setDabba={setDabba}
           //   clickedIndices
           //   gameOver
           //   handleClick

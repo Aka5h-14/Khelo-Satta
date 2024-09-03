@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useRef, useContext, useState, useEffect } from "react";
 import context from "./MyContext";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -27,6 +27,7 @@ function Mine(props) {
     setClickedIndices,
     bet,
     setBet,
+    // dabba, setDabba,
     API,
     handleSetArray,
     uploadAmount,
@@ -35,6 +36,7 @@ function Mine(props) {
   } = useContext(context);
 
   const [isLoading, setisLoading]= useState(false);
+  const [dabba, setDabba]= useState(props.block);
 
   const handleSetValue = (index, newValue) => {
     const newArray = [...array];
@@ -54,52 +56,127 @@ function Mine(props) {
     return block.data;
   }
 
-  async function handleClick (data) {
-    if(gameOver) {
+  const requestQueue = useRef([]);
+  const isProcessing = useRef(false);
+
+  const handleClick = async (data) => {
+    if (gameOver || isProcessing.current) {
       return;
     }
-    setisLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    
+    // Add the data to the queue
+    requestQueue.current.push(data);
 
-    if (!clickedIndices.includes(data)) {
-      setClickedIndices([...clickedIndices, data]);
-    } else {
-      return;
-    }
-
-    const box = await clickReq(data);
-    setMultiply(box.multiplier);
-
-    setTimeout(async()=>{
-      setisLoading(false)
-      handleSetValue(data, box.block);
-    },1000);
-
-
-    if (box.maxWin) {
-      // console.log(money," ",multiply)
-      let a = (money * (box.multiplier)).toFixed(4);
-      await uploadData(+a, money);
-      let b = (+cash) + (+a);
-      await uploadAmount(+b);
-      handleSetArray();
-      setgameOver(true);
-
-      setCash(+cash + (+a));
-      setProfit(+profit + ((+a)-money));
-      setMoney(0);
-    }
-
-    if (box.block == 0) {
-      // db call to deduct money
-      await uploadData(-money, money);
-      await uploadAmount(+cash);
-      setgameOver(true);
-      handleSetArray();
-      setProfit(profit - money);
-      setMoney(0);
-      setMultiply(1);
+    // If not processing, start processing the queue
+    if (!isProcessing.current) {
+      processQueue();
     }
   };
+
+  const processQueue = async () => {
+    isProcessing.current = true;
+
+    while (requestQueue.current.length > 0) {
+      const data = requestQueue.current.shift(); // Get the next data item from the queue
+
+      if (!clickedIndices.includes(data)) {
+        setisLoading(true);
+        setClickedIndices((prev) => [...prev, data]);
+
+        try {
+          
+          const box = await clickReq(data); // Your async request to the backend
+          setMultiply(box.multiplier);
+          setDabba(box.block);
+
+          // Simulate a delay for UI purposes
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+            setisLoading(false);
+            handleSetValue(data, box.block);
+            console.log(array);
+
+          // Handle success or failure of the box result
+          if (box.maxWin) {
+            let a = (money * box.multiplier).toFixed(4);
+            await uploadData(+a, money);
+            let b = +cash + +a;
+            await uploadAmount(+b);
+            handleSetArray();
+            setgameOver(true);
+            setCash((prev) => +prev + +a);
+            setProfit((prev) => +prev + (+a - money));
+            setMoney(0);
+          }
+
+          if (box.block === 0) {
+            setgameOver(true);
+            uploadData(-money, money);
+            uploadAmount(+cash);
+            handleSetArray();
+            setProfit((prev) => prev - money);
+            setMultiply(1);
+            setMoney(0);
+          }
+        } catch (error) {
+          console.error('Error processing click:', error);
+        }
+      }
+    }
+
+    isProcessing.current = false; // Reset processing flag when done
+  };
+
+  useEffect(()=>{
+    setDabba(-1);
+  },[gameOver])
+
+  // async function handleClick (data) {
+  //   if(gameOver) {
+  //     return;
+  //   }
+  //   setisLoading(true);
+
+  //   if (!clickedIndices.includes(data)) {
+  //     setClickedIndices([...clickedIndices, data]);
+  //   } else {
+  //     return;
+  //   }
+
+  //   const box = await clickReq(data);
+  //   setMultiply(box.multiplier);
+
+  //   setTimeout(async()=>{
+  //     setisLoading(false)
+  //     handleSetValue(data, box.block);
+  //   },1000);
+
+
+  //   if (box.maxWin) {
+  //     // console.log(money," ",multiply)
+  //     let a = (money * (box.multiplier)).toFixed(4);
+  //     await uploadData(+a, money);
+  //     let b = (+cash) + (+a);
+  //     await uploadAmount(+b);
+  //     handleSetArray();
+  //     setgameOver(true);
+
+  //     setCash(+cash + (+a));
+  //     setProfit(+profit + ((+a)-money));
+  //     setMoney(0);
+  //   }
+
+  //   if (box.block == 0) {
+  //     // db call to deduct money
+  //     await uploadData(-money, money);
+  //     await uploadAmount(+cash);
+  //     setgameOver(true);
+  //     handleSetArray();
+  //     setProfit(profit - money);
+  //     setMoney(0);
+  //     setMultiply(1);
+  //   }
+  // };
 
   return (
     <>
@@ -119,12 +196,12 @@ function Mine(props) {
         `}
         onClick={() => handleClick(props.index)}
       >
-        {clickedIndices.includes(props.index) || gameOver ? (
-          props.block == 1 ? (
+        {/* {clickedIndices.includes(props.index) || gameOver ? (
+          array[props.index] == 1 ? (
             <img className={`w-10 h-10 ${
               clickedIndices.includes(props.index)? 'brightness-110': 'brightness-75'
             }`} src={diamond} alt="diamond" />
-          ) : props.block == 0 ? (
+          ) : array[props.index] == 0 ? (
             <img className={`w-10 h-10 ${
               clickedIndices.includes(props.index)? 'brightness-150': 'brightness-50'
             }`} src={bomb} alt="bomb-emoji" />
@@ -133,7 +210,18 @@ function Mine(props) {
           )
         ) : (
           ""
-        )}
+        )} */}
+        {
+          dabba == 1 || props.block==1 ? (
+            <img className={`w-10 h-10 ${
+              clickedIndices.includes(props.index)? 'brightness-110': 'brightness-75'
+            }`} src={diamond} alt="diamond" />
+          ) : dabba == 0 || props.block==0 ? (
+            <img className={`w-10 h-10 ${
+              clickedIndices.includes(props.index)? 'brightness-150': 'brightness-50'
+            }`} src={bomb} alt="bomb-emoji" />
+          ) : ""
+        }
       </div>
     </>
   );
