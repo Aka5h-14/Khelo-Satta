@@ -18,7 +18,7 @@ const accountSchema = {
     createdAt: {
         type: Date,
         default: Date.now,  
-        index:{expires: "10h" }   // This sets the TTL to 1 hour (use a string or number of seconds)
+        index:{expires: 36000 }   // This sets the TTL to 1 hour (use a string or number of seconds)
     }
 }
 

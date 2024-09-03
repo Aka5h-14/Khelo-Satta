@@ -58,12 +58,14 @@ function Mine(props) {
 
   const requestQueue = useRef([]);
   const isProcessing = useRef(false);
+  let flag = false;
 
   const handleClick = async (data) => {
-    if (gameOver || isProcessing.current) {
+    if (gameOver || flag) {
       return;
     }
-    await new Promise((resolve) => setTimeout(resolve, 800));
+    flag = true;
+    // await new Promise((resolve) => setTimeout(resolve, 800));
     
     // Add the data to the queue
     requestQueue.current.push(data);
@@ -82,11 +84,15 @@ function Mine(props) {
 
       if (!clickedIndices.includes(data)) {
         setisLoading(true);
-        setClickedIndices((prev) => [...prev, data]);
-
+        
         try {
           
-          const box = await clickReq(data); // Your async request to the backend
+          const box = await clickReq(data);
+          if("msg" in box){
+            setisLoading(false);
+            return;
+          }
+          setClickedIndices((prev) => [...prev, data]);
           setMultiply(box.multiplier);
           setDabba(box.block);
 
@@ -107,16 +113,18 @@ function Mine(props) {
             setCash((prev) => +prev + +a);
             setProfit((prev) => +prev + (+a - money));
             setMoney(0);
+            flag = false;
           }
 
           if (box.block === 0) {
             setgameOver(true);
+            handleSetArray();
             uploadData(-money, money);
             uploadAmount(+cash);
-            handleSetArray();
             setProfit((prev) => prev - money);
             setMultiply(1);
             setMoney(0);
+            flag = false;
           }
         } catch (error) {
           console.error('Error processing click:', error);

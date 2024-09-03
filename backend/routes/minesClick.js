@@ -4,7 +4,8 @@ const router = Router();
 
 router.get("/minesClick", authentification, async function (req, res) {
 
-  if (!req.query.gameState.gameOver) {
+  console.log(req.session.gameState.gameOver);
+  if (!req.session.gameState.gameOver) {
     const Clickedindex = req.query.index;
 
     if (!req.session.gameState.clickedIndices) {
@@ -36,7 +37,7 @@ router.get("/minesClick", authentification, async function (req, res) {
         });
       }
     } else {
-      req.query.session.gameState.gameOver = true ;
+      req.session.gameState.gameOver = true ;
       res.send({
         block: data,
         multiplier: 0,
@@ -44,7 +45,7 @@ router.get("/minesClick", authentification, async function (req, res) {
     }
   }
   else{
-    res.send("wrong request")
+    res.send({msg:"wrong request"})
   }
 });
 
