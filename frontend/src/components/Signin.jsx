@@ -2,8 +2,9 @@
 import { useRef,useContext } from "react";
 import context from "./MyContext";
 import axios from "axios";
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 import { Link,useNavigate } from "react-router-dom";
+import logo from '../assets/logo.png'
 
 
 export default function Signin() {
@@ -25,11 +26,13 @@ export default function Signin() {
       password: password
       
     });
-    if("msg" in send.data){
+    if("balance" in send.data){
       navigate("/mines");
       setIsAuthenticated(true);
       let money = send.data.balance;
       setCash(money);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      alert("How to play\n1) Enter the bet amount\n2) Click the add bet button\n3) Enter the number of mines\n4) Click the play button\n5) Play the game by clicking on the tiles\n \nYou can cashout the amount using the Cash Out button")
     }
     else{
       alert("login failed")
@@ -47,12 +50,12 @@ export default function Signin() {
           <body class="h-full">
           ```
         */}
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 bg-slate-100">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
               alt="Khelo Satta"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              className="mx-auto h-10 w-auto"
+              src={logo}
+              className="mx-auto h-auto w-40 md:w-60"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               Sign in to your account
@@ -73,7 +76,7 @@ export default function Signin() {
                     ref={phoneNumberInputRef}
                     required
                     autoComplete="tel"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                   />
                 </div>
               </div>
@@ -90,7 +93,7 @@ export default function Signin() {
                     ref={passwordInputRef}
                     required
                     autoComplete="tel"
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                   />
                 </div>
               </div>

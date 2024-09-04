@@ -6,7 +6,7 @@ router.get("/play",authentification, function(req,res){
     const mines = req.query.mines;
   
     if(mines<1 || mines>24 || mines==null || mines==undefined){
-      res.send("wrong input of mines");
+      res.send({msg :"wrong input of mines"});
       return;
     }
   

@@ -30,7 +30,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false 
 }));
 
-app.enable('trust proxy')
+
 
 app.use(session({
   secret: 'mines', 
@@ -39,8 +39,8 @@ app.use(session({
   proxy: true,
   cookie: {
     // httpOnly: true,
-    // secure: true,
-    // sameSite: 'lax',
+    secure: true,
+    sameSite: 'lax',
     maxAge: 60000 * 60
   },
   store: store,

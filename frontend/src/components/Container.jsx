@@ -29,13 +29,15 @@ function Container() {
 
     if (!gameOver) {
       setgameOver(true);
+      const a = (money * multiply).toFixed(4);
+      const maxAmount= +a;
+      const mltp= multiply;
+      alert(`WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
       
       await uploadAmount(+((cash + (money * multiply)).toFixed(4)));
-
-      await uploadData(+((money * multiply).toFixed(4)), money);
+      await uploadData(+a, money);
       handleSetArray();
-      // setCash(+(cash + +(money * multiply).toFixed(4)).toFixed(4));;
-      setCash(+cash + +((money * multiply).toFixed(4)));
+      setCash(+cash + +a);
       setProfit(+profit + +(((money * multiply)-money).toFixed(4)));
       setMultiply(1);
       setMoney(0);

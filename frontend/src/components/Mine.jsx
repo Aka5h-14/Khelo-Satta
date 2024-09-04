@@ -105,19 +105,24 @@ function Mine(props) {
           if (box.maxWin) {
             let a = (money * box.multiplier).toFixed(4);
             await uploadData(+a, money);
-            let b = +cash + +a;
-            await uploadAmount(+b);
+            await uploadAmount(+cash + +a);
+            const maxAmount= +a;
+            const mltp= box.multiplier;
+            alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
             handleSetArray();
             setgameOver(true);
             setCash((prev) => +prev + +a);
             setProfit((prev) => +prev + (+a - money));
+            setMultiply(1);
             setMoney(0);
             flag = false;
           }
 
           if (box.block === 0) {
             setgameOver(true);
-            handleSetArray();
+            const mny= money;
+            await handleSetArray();
+            alert(`LOSS \nMoney = ${mny}`)
             uploadData(-money, money);
             uploadAmount(+cash);
             setProfit((prev) => prev - money);
@@ -203,21 +208,6 @@ function Mine(props) {
         `}
         onClick={() => handleClick(props.index)}
       >
-        {/* {clickedIndices.includes(props.index) || gameOver ? (
-          array[props.index] == 1 ? (
-            <img className={`w-10 h-10 ${
-              clickedIndices.includes(props.index)? 'brightness-110': 'brightness-75'
-            }`} src={diamond} alt="diamond" />
-          ) : array[props.index] == 0 ? (
-            <img className={`w-10 h-10 ${
-              clickedIndices.includes(props.index)? 'brightness-150': 'brightness-50'
-            }`} src={bomb} alt="bomb-emoji" />
-          ) : (
-            ""
-          )
-        ) : (
-          ""
-        )} */}
         {
           dabba == 1 || props.block==1 ? (
             <img className={`w-10 h-10 ${

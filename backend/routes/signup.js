@@ -8,7 +8,7 @@ router.post("/signup", async function(req,res){
   
     const parsedData = schema.safeParse(data);
     if(!parsedData.success){
-      res.json(parsedData.error);
+      res.send({msg: parsedData.error});
       return;
     }
   
@@ -16,7 +16,7 @@ router.post("/signup", async function(req,res){
       phoneNumber: data.phoneNumber
     });
     if(users){
-      res.json("enter a new phone number")
+      res.send({msg:"enter a new phone number"});
       return;
     }
     else{

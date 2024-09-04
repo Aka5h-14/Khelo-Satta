@@ -1,8 +1,6 @@
 import Mine from "./Mine";
 import context from './MyContext';
 import { useContext , useEffect } from "react";
-// import Popup from "./Popup";
-
 
 function Mines() {
 
@@ -34,11 +32,20 @@ function Mines() {
     requests,  } = useContext(context);
   
 
-  useEffect(() => {
-    if(money>0){
-    requests();
-    }
-  }, [play]);
+    useEffect(() => {
+      const fetchData = async () => {
+        if (money > 0) {
+          try {
+            const data = await requests();
+            alert(data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        }
+      };
+  
+      fetchData();
+    }, [play]);
 
 
   return (
@@ -49,11 +56,6 @@ function Mines() {
           key={index}
           index={index}
           block={block}
-          // dabba={dabba}
-          // setDabba={setDabba}
-          //   clickedIndices
-          //   gameOver
-          //   handleClick
         ></Mine>
       ))}
     </div>
