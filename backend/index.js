@@ -60,15 +60,15 @@ const updateUser = require("./routes/updateUser");
 
 app.get("/api/", (req, res) => res.send("Express on Vercel"));
 
-app.use("/", getAmount);
-app.use("/", minesClick);
-app.use("/", play);
-app.use("/", sendData);
-app.use("/", signin);
-app.use("/", signOut);
-app.use("/", signup);
-app.use("/", updateBooks);
-app.use("/", updateUser);
+app.use("/api/", getAmount);
+app.use("/api/", minesClick);
+app.use("/api/", play);
+app.use("/api/", sendData);
+app.use("/api/", signin);
+app.use("/api/", signOut);
+app.use("/api/", signup);
+app.use("/api/", updateBooks);
+app.use("/api/", updateUser);
 
 module.exports=app;
 
