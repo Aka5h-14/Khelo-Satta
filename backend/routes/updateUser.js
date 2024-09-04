@@ -11,7 +11,7 @@ router.post("/updateUser", authentification ,async function (req,res){
       res.send("money updated");
     }
     else{
-      res.send("money nt updated");
+      res.send("money not updated");
     }
   })
 

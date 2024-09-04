@@ -52,9 +52,6 @@ router.get("/play",authentification, function(req,res){
     const session = req.session;
       session.gameState = { aray: createArray() , multiplier: multiplier(), gameOver: false}; 
       res.send({
-        array: session.gameState.aray,
-        multiplier: session.gameState.multiplier,
-        gameOver: session.gameState.gameOver,
         msg: "game ready to play"
       });
     
