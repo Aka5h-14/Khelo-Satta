@@ -58,7 +58,7 @@ const signup = require("./routes/signup");
 const updateBooks = require("./routes/updateBooks");
 const updateUser = require("./routes/updateUser");
 
-app.get("/api", (req, res) => res.send("Express on Vercel"));
+app.get("/api/", (req, res) => res.send("Express on Vercel"));
 
 app.use("/", getAmount);
 app.use("/", minesClick);
