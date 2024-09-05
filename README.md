@@ -57,11 +57,13 @@ To get a local copy of the project up and running, follow these steps:
 
 2. **Install frontend dependencies:**
 
+    ```bash
     cd frontend
     npm install
 
 3. **Install backend dependencies:**
 
+    ```bash
     cd ../backend
     npm install
 
@@ -71,13 +73,17 @@ To get a local copy of the project up and running, follow these steps:
 
 5. **Run the development server:**
 
-    - Frontend:
-        cd frontend
-        npm run dev
+- Frontend:
+    
+  ```bash
+  cd frontend
+  npm run dev
 
-    - Backend:
-        cd backend
-        npm start
+- Backend:
+
+  ```bash
+  cd backend
+  npm start
 
 6. **Access the application:**
 
