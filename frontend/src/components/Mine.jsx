@@ -143,52 +143,6 @@ function Mine(props) {
     setDabba(-1);
   },[gameOver])
 
-  // async function handleClick (data) {
-  //   if(gameOver) {
-  //     return;
-  //   }
-  //   setisLoading(true);
-
-  //   if (!clickedIndices.includes(data)) {
-  //     setClickedIndices([...clickedIndices, data]);
-  //   } else {
-  //     return;
-  //   }
-
-  //   const box = await clickReq(data);
-  //   setMultiply(box.multiplier);
-
-  //   setTimeout(async()=>{
-  //     setisLoading(false)
-  //     handleSetValue(data, box.block);
-  //   },1000);
-
-
-  //   if (box.maxWin) {
-  //     // console.log(money," ",multiply)
-  //     let a = (money * (box.multiplier)).toFixed(4);
-  //     await uploadData(+a, money);
-  //     let b = (+cash) + (+a);
-  //     await uploadAmount(+b);
-  //     handleSetArray();
-  //     setgameOver(true);
-
-  //     setCash(+cash + (+a));
-  //     setProfit(+profit + ((+a)-money));
-  //     setMoney(0);
-  //   }
-
-  //   if (box.block == 0) {
-  //     // db call to deduct money
-  //     await uploadData(-money, money);
-  //     await uploadAmount(+cash);
-  //     setgameOver(true);
-  //     handleSetArray();
-  //     setProfit(profit - money);
-  //     setMoney(0);
-  //     setMultiply(1);
-  //   }
-  // };
 
   return (
     <>

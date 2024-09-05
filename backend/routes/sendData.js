@@ -6,7 +6,6 @@ router.get("/sendData",authentification,function(req,res){
     res.send({
       array: req.session.gameState.aray
     })
-    // req.session.gameState.aray=[];
     req.session.gameState.clickedIndices=[];
     req.session.gameState.multiplier=[];
   })

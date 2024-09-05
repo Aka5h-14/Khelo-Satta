@@ -1,24 +1,22 @@
 const express = require("express");
 require('dotenv').config()
 const cors = require('cors');
-// const cookieParser = require('cookie-parser')
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 
 
 const store = new MongoDBStore({
-  uri: process.env.MONGO_URL,
+  uri: process.env.MONGO_URL ,
   databaseName: 'mines',
   collection: 'Sessions'
 });
-
 store.on('error', function(error) {
   console.log(error);
 });
 
-
 const app = express();
+
 app.use(cors({
   origin: ['https://khelo-satta-8hkv.vercel.app','http://localhost:5173'],
   credentials: true
@@ -30,15 +28,13 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false 
 }));
 
-
-
 app.use(session({
-  secret: 'mines', 
+  secret: process.env.SESSIONS_SEC, 
   saveUninitialized: false,
   resave: false,
   proxy: true,
   cookie: {
-    // httpOnly: true,
+    httpOnly: true,
     secure: true,
     sameSite: 'lax',
     maxAge: 60000 * 60
@@ -57,7 +53,7 @@ const signup = require("./routes/signup");
 const updateBooks = require("./routes/updateBooks");
 const updateUser = require("./routes/updateUser");
 
-app.get("/api/", (req, res) => res.send("Express on Vercel"));
+app.get("/api/", (req, res) => res.send("Khelo-Satta Express Backend on Vercel"));
 
 app.use("/api/", getAmount);
 app.use("/api/", minesClick);
