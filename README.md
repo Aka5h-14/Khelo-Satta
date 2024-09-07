@@ -69,9 +69,12 @@ To get a local copy of the project up and running, follow these steps:
 
 4. **Set up environment variables:**
 
-    Create a .env file in the backend directory and add the necessary environment variables 
+    Create a .env file in the backend directory and add the necessary environment variables
+      PORT (for express server)
+      MONGO_URL (mongo db url)
+      SESSIONS_SEC (secret of express sessions)
 
-5. **Run the development server:**
+6. **Run the development server:**
 
 - Frontend:
     
