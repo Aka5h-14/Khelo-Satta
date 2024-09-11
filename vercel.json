@@ -10,7 +10,7 @@
         }
       }
     ],
-    "routes": [
+    "rewrites": [
       {
         "src": "/api/(.*)", 
         "dest": "/backend/index.js"
