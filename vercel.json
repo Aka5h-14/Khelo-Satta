@@ -14,11 +14,15 @@
       {
         "src": "/api/(.*)", 
         "dest": "/backend/index.js"
+      },
+      {
+          "src": "/(.*)\\.(js|css|map|ico|png|jpg|jpeg|svg|gif|webp|woff|woff2|ttf)", 
+          "dest": "/frontend/assets/$1"
       }
       ,
       {
         "src": "/(.*)",
-        "dest": "/frontend"
+        "dest": "/frontend/index.html"
       }
     ]
 }
