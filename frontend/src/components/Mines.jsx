@@ -56,7 +56,7 @@ function Mines() {
 
   return (
     <>
-  <OutlinedAlerts className=" sticky top-2 " display={error} setDisplay={setError} type='success' msg={Data} />
+  <OutlinedAlerts className=" fixed top-2 " display={error} setDisplay={setError} type='success' msg={Data} />
     <div className="mx-auto w-80 xg:w-96 p-5 rounded grid grid-cols-5 gap-5 bg-slate-600">
       {array.map((block, index) => (
         <Mine
