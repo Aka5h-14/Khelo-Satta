@@ -1,6 +1,6 @@
 import Mine from "./Mine";
 import context from './MyContext';
-import { useContext , useEffect } from "react";
+import { useContext , useEffect , useState } from "react";
 import AutohideSnackbar from "./SnackBar";
 
 function Mines() {
