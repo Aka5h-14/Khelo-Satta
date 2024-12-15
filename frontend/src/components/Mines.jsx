@@ -43,7 +43,6 @@ function Mines() {
           setError(true);
           try {
             setData(await requests());
-            setError(true);
           } catch (error) {
             setData('Error fetching data:',error)
             console.error('Error fetching data:', error);
@@ -57,7 +56,7 @@ function Mines() {
 
   return (
     <>
-    {error ? <OutlinedAlerts type='success' msg={Data} /> : null}
+  <OutlinedAlerts display={error} setDisplay={setError} type='success' msg={Data} />
     <div className="mx-auto w-80 xg:w-96 p-5 rounded grid grid-cols-5 gap-5 bg-slate-600">
       {array.map((block, index) => (
         <Mine

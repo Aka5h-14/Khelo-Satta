@@ -51,7 +51,7 @@ export default function Signup() {
 
   return (
     <>
-      {error ? <OutlinedAlerts type='warning' msg={`SignUp failed -> ${sdata.data.msg.issues[0].message}\n${sdata.data.msg.issues[0].path}`} /> : null}
+      <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg={`SignUp failed -> ${sdata.data.msg.issues[0].message}\n${sdata.data.msg.issues[0].path}`} />
       {/*
           This example requires updating your template:
   

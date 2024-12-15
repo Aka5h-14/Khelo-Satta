@@ -2,20 +2,22 @@ import * as React from "react";
 import Alert from "@mui/material/Alert";
 
 export default function OutlinedAlerts(props) {
-  const [display, setDisplay] = React.useState(true);
+  // const [display, setDisplay] = React.useState(true);
 
-  setTimeout(()=>{
-    setDisplay(false)
-  }, 4000)
-  
+  if (props.display == true) {
+    setTimeout(() => {
+      props.setDisplay(false);
+    }, 4000);
+  }
+
   return (
     <>
-      {display ? (
+      {props.display ? (
         <Alert
           color={props.type}
           severity={props.type}
           onClose={() => {
-            setDisplay(false);
+            props.setDisplay(false);
           }}
         >
           {props.msg}

@@ -33,7 +33,7 @@ export default function Bet(){
 
 
     return(<>
-    {error ? <OutlinedAlerts type='warning' msg='Wrong bet amount.' /> : null}
+    <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg='Wrong bet amount.' /> 
 
     <div className="border-y-2 border-white bg-slate-700 grid-cols-1 py-2 text-xs xg:text-base md:text-lg">
         <div className="flex justify-center mb-5" >

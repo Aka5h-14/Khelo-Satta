@@ -44,7 +44,7 @@ export default function Signin() {
 
     return (
       <>
-      {error ? <OutlinedAlerts type='warning' msg='SignIn failed' /> : null}
+      <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg='SignIn failed' />
         {/*
           This example requires updating your template:
   

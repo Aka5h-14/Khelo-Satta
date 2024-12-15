@@ -55,8 +55,8 @@ function Container() {
 
   return (
     <>
-    {errorM ? <OutlinedAlerts type='warning' msg='Add bet.' /> : null}
-    {win ? <OutlinedAlerts type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> : null}
+     <OutlinedAlerts display={errorM} setDisplay={setErrorM} type='warning' msg='Add bet.' /> 
+     <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> 
 
       <div className="bg-slate-700 p-5 pt-8  border-b-2 border-white">
         <Mines />

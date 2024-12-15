@@ -159,8 +159,8 @@ function Mine(props) {
 
   return (
     <>
-      {win ? <OutlinedAlerts type='success' msg={`MAX Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> : null}
-      {loss ? <OutlinedAlerts type='error' msg={`LOSS \nMoney = ${lossAmnt}`} /> : null}
+       <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`MAX Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> 
+       <OutlinedAlerts display={loss} setDisplay={setloss} type='error' msg={`LOSS \nMoney = ${lossAmnt}`} /> 
       <div
         className={`w-12 h-12 xg:w-14 xg:h-14 text-center rounded flex items-center justify-center bg-slate-400 hover:scale-105 ${isLoading? 'animate-grow-shrink':''}
           //  
