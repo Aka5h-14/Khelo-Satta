@@ -1,14 +1,18 @@
 import bcrypt from "bcryptjs"
-import { useRef, useContext } from "react";
+import { useRef, useContext, useState } from "react";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { useNavigate } from "react-router-dom";
 import context from "./MyContext";
 import logo from '../assets/logo.png'
+import OutlinedAlerts from "./AlertGreen";
 
 const numSaltRounds = 8;
 
 export default function Signup() {
+
+  const  [error, setError ] = useState(false);
+  const [sdata , setSdata] = useState();
 
   const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
@@ -33,17 +37,21 @@ export default function Signup() {
         password: hashedPassword,
         email: email  
     });
+    setSdata(send);
 
     if(send.data.msg == "user created"){
       navigate("/");
     }
     else{
-      alert(`signup failed\n${send.data.msg.issues[0].message}\n${send.data.msg.issues[0].path}`);
+      setError(true);
+
+      // alert(`Signup failed\n${send.data.msg.issues[0].message}\n${send.data.msg.issues[0].path}`);
     }
   }
 
   return (
     <>
+      {error ? <OutlinedAlerts type='warning' msg={`SignUp failed -> ${sdata.data.msg.issues[0].message}\n${sdata.data.msg.issues[0].path}`} /> : null}
       {/*
           This example requires updating your template:
   

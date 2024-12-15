@@ -1,7 +1,12 @@
 import context from "./MyContext";
 import { useCallback, useContext, useState } from "react";
+import Alert from '@mui/material/Alert';
+import OutlinedAlerts from "./AlertGreen";
 
 export default function Bet(){
+
+    const  [error, setError ] = useState(false);
+
     const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
     const [paisa,setPaisa] =useState(0);
@@ -21,13 +26,17 @@ export default function Bet(){
             setMoney(+money + +bet);
         }
         else{
-            alert("wrong bet amount")
+            setError(true);
+            <Alert severity="warning">Wrong bet amount.</Alert>
+            // alert("wrong bet amount")
         }
     };
 
 
 
     return(<>
+    {error ? <OutlinedAlerts type='warning' msg='Wrong bet amount.' /> : null}
+
     <div className="border-y-2 border-white bg-slate-700 grid-cols-1 py-2 text-xs xg:text-base md:text-lg">
         <div className="flex justify-center mb-5" >
             <div className="border-2 border-black bg-slate-600 text-white p-2 font-bold">₹ {cash}</div>

@@ -6,6 +6,13 @@ import diamond from "../assets/diamond.png";
 import bomb from "../assets/bomb.png";
 
 function Mine(props) {
+
+  const [ win, setwin ] = useState(false);
+  const [ loss, setloss ] = useState(false);
+  const [ lossAmnt , setLossAmnt ] = useState(0);
+  const [ maxAmount, setMaxAmount ] = useState(0);
+  const [ mltp, setMltp ] = useState(0);
+
   const {
     array,
     setArray,
@@ -106,9 +113,12 @@ function Mine(props) {
             let a = (money * box.multiplier).toFixed(4);
             await uploadData(+a, money);
             await uploadAmount(+cash + +a);
-            const maxAmount= +a;
-            const mltp= box.multiplier;
-            alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
+            // const maxAmount= +a;
+            // const mltp= box.multiplier;
+            setMaxAmount(+a);
+            setMltp(box.multiplier);
+            setwin(true);
+            // alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
             handleSetArray();
             setgameOver(true);
             setCash((prev) => +prev + +a);
@@ -122,7 +132,9 @@ function Mine(props) {
             setgameOver(true);
             const mny= money;
             await handleSetArray();
-            alert(`LOSS \nMoney = ${mny}`)
+            setloss(true);
+            setLossAmnt(mny);
+            // alert(`LOSS \nMoney = ${mny}`)
             uploadData(-money, money);
             uploadAmount(+cash);
             setProfit((prev) => prev - money);
@@ -146,6 +158,8 @@ function Mine(props) {
 
   return (
     <>
+      {win ? <OutlinedAlerts type='success' msg={`MAX Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> : null}
+      {loss ? <OutlinedAlerts type='error' msg={`LOSS \nMoney = ${lossAmnt}`} /> : null}
       <div
         className={`w-12 h-12 xg:w-14 xg:h-14 text-center rounded flex items-center justify-center bg-slate-400 hover:scale-105 ${isLoading? 'animate-grow-shrink':''}
           //  

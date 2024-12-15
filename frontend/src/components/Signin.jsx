@@ -1,13 +1,15 @@
 
-import { useRef,useContext } from "react";
+import { useRef,useContext,useState } from "react";
 import context from "./MyContext";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { Link,useNavigate } from "react-router-dom";
 import logo from '../assets/logo.png'
-
+import OutlinedAlerts from "./AlertGreen";
 
 export default function Signin() {
+
+  const  [error, setError ] = useState(false);
 
   const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
@@ -31,17 +33,18 @@ export default function Signin() {
       setIsAuthenticated(true);
       let money = send.data.balance;
       setCash(money);
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      alert("How to play\n1) Enter the bet amount\n2) Click the add bet button\n3) Enter the number of mines\n4) Click the play button\n5) Play the game by clicking on the tiles\n \nYou can cashout the amount using the Cash Out button")
+      // alert("How to play\n1) Enter the bet amount\n2) Click the add bet button\n3) Enter the number of mines\n4) Click the play button\n5) Play the game by clicking on the tiles\n \nYou can cashout the amount using the Cash Out button")
+
     }
     else{
-      alert("login failed")
+      setError(true);
     }
     
   }
 
     return (
       <>
+      {error ? <OutlinedAlerts type='warning' msg='SignIn failed' /> : null}
         {/*
           This example requires updating your template:
   

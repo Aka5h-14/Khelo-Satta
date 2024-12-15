@@ -1,13 +1,22 @@
 import React, { useState, useCallback, useContext } from "react";
 import Mines from "./Mines";
 import context from "./MyContext";
+import Alert from '@mui/material/Alert';
+import OutlinedAlerts from "./AlertGreen";
 
 function Container() {
+  const [ errorM, setErrorM ] = useState(false);
+  const [ win, setwin ] = useState(false);
+  const [ maxAmount, setMaxAmount ] = useState(0);
+  const [ mltp, setMltp ] = useState(0);
+
   const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated,isEnd, setisEnd, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
   function next() {
     if (money == 0) {
-      alert("add bet");
+      setErrorM(true);
+      <Alert severity="warning">Add bet.</Alert>
+      // alert("add bet");
     }
     if (gameOver) {
       setArray([
@@ -30,9 +39,10 @@ function Container() {
     if (!gameOver) {
       setgameOver(true);
       const a = (money * multiply).toFixed(4);
-      const maxAmount= +a;
-      const mltp= multiply;
-      alert(`WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
+      setMaxAmount(+a);
+      setMltp(multiply);
+      setwin(true);
+      // alert(`WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
       
       await uploadAmount(+((cash + (money * multiply)).toFixed(4)));
       await uploadData(+a, money);
@@ -46,6 +56,9 @@ function Container() {
 
   return (
     <>
+    {errorM ? <OutlinedAlerts type='warning' msg='Add bet.' /> : null}
+    {win ? <OutlinedAlerts type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> : null}
+
       <div className="bg-slate-700 p-5 pt-8  border-b-2 border-white">
         <Mines />
         <div className="flex justify-evenly pt-5 text-xs xg:text-base md:text-lg"> 

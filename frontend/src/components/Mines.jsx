@@ -1,6 +1,7 @@
 import Mine from "./Mine";
 import context from './MyContext';
 import { useContext , useEffect } from "react";
+import AutohideSnackbar from "./SnackBar";
 
 function Mines() {
 
@@ -60,7 +61,7 @@ function Mines() {
       ))}
     </div>
     {
-      gameOver==true ? <p className="text-red-600">game over</p> : ""
+      gameOver==true ? <AutohideSnackbar message="Game Over"/>  : ""
     }
     
     </>

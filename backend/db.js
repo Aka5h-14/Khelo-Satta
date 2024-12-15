@@ -1,7 +1,9 @@
 const mongoose = require ('mongoose');
 const Schema = mongoose;
 require('dotenv').config()
+
 mongoose.connect(process.env.MONGO_URL);
+
 const UserSchema = {
     name: String,
     phoneNumber: String,
