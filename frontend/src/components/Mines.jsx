@@ -2,6 +2,7 @@ import Mine from "./Mine";
 import context from './MyContext';
 import { useContext , useEffect , useState } from "react";
 import AutohideSnackbar from "./SnackBar";
+import OutlinedAlerts from "./AlertGreen";
 
 function Mines() {
 
