@@ -119,7 +119,7 @@ function Mine(props) {
             setMaxAmount(+a);
             setMltp(box.multiplier);
             setwin(true);
-            // alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
+            alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
             handleSetArray();
             setgameOver(true);
             setCash((prev) => +prev + +a);
@@ -135,7 +135,7 @@ function Mine(props) {
             await handleSetArray();
             setloss(true);
             setLossAmnt(mny);
-            // alert(`LOSS \nMoney = ${mny}`)
+            alert(`LOSS \nMoney = ${mny}`)
             uploadData(-money, money);
             uploadAmount(+cash);
             setProfit((prev) => prev - money);
@@ -159,8 +159,11 @@ function Mine(props) {
 
   return (
     <>
+    {/* <div>
+
        <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`MAX Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> 
-       <OutlinedAlerts display={loss} setDisplay={setloss} type='error' msg={`LOSS \nMoney = ${lossAmnt}`} /> 
+       <OutlinedAlerts display={loss} setDisplay={setloss} type='error' msg={`LOSS \nMoney = ${lossAmnt}`}/> 
+       </div> */}
       <div
         className={`w-12 h-12 xg:w-14 xg:h-14 text-center rounded flex items-center justify-center bg-slate-400 hover:scale-105 ${isLoading? 'animate-grow-shrink':''}
           //  
