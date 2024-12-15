@@ -15,7 +15,6 @@ function Container() {
   function next() {
     if (money == 0) {
       setErrorM(true);
-      <Alert severity="warning">Add bet.</Alert>
       // alert("add bet");
     }
     if (gameOver) {

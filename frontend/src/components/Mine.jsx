@@ -4,6 +4,7 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 import diamond from "../assets/diamond.png";
 import bomb from "../assets/bomb.png";
+import OutlinedAlerts from "./AlertGreen";
 
 function Mine(props) {
 

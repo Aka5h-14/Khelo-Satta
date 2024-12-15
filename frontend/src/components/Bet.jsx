@@ -1,11 +1,10 @@
 import context from "./MyContext";
 import { useCallback, useContext, useState } from "react";
-import Alert from '@mui/material/Alert';
 import OutlinedAlerts from "./AlertGreen";
 
 export default function Bet(){
 
-    const  [error, setError ] = useState(false);
+    const [error, setError ] = useState(false);
 
     const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
 
@@ -27,7 +26,6 @@ export default function Bet(){
         }
         else{
             setError(true);
-            <Alert severity="warning">Wrong bet amount.</Alert>
             // alert("wrong bet amount")
         }
     };
