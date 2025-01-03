@@ -4,7 +4,16 @@ const cors = require('cors');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
+const mongoose = require("mongoose");
 
+async function ensureDbConnection(req, res, next) {
+  if (mongoose.connection.readyState !== 1) {
+    await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+  }
+  next();
+}
+
+app.use(ensureDbConnection);
 
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL ,
@@ -18,7 +27,9 @@ store.on('error', function(error) {
 const app = express();
 
 app.use(cors({
-  origin: ['https://khelo-satta-8hkv.vercel.app','http://localhost:5173'],
+  origin: ['https://khelo-satta-8hkv.vercel.app',
+  // 'http://localhost:5173'
+  ],
   credentials: true
 }
 ));
@@ -40,7 +51,6 @@ app.use(session({
     maxAge: 60000 * 60
   },
   store: store,
-
 }));
 
 const getAmount = require("./routes/getAmount");
