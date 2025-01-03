@@ -6,15 +6,6 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 
-async function ensureDbConnection(req, res, next) {
-  if (mongoose.connection.readyState !== 1) {
-    await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-  }
-  next();
-}
-
-app.use(ensureDbConnection);
-
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL ,
   databaseName: 'mines',
@@ -25,6 +16,15 @@ store.on('error', function(error) {
 });
 
 const app = express();
+
+async function ensureDbConnection(req, res, next) {
+  if (mongoose.connection.readyState !== 1) {
+    await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+  }
+  next();
+}
+
+app.use(ensureDbConnection);
 
 app.use(cors({
   origin: ['https://khelo-satta-8hkv.vercel.app',
