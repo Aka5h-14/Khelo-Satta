@@ -6,6 +6,21 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 
+const app = express();
+
+async function connectToDatabase() {
+  try {
+    await mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Connected to MongoDB successfully.");
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    process.exit(1); // Exit the process if the database connection fails
+  }
+}
+
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL ,
   databaseName: 'mines',
@@ -14,17 +29,6 @@ const store = new MongoDBStore({
 store.on('error', function(error) {
   console.log(error);
 });
-
-const app = express();
-
-async function ensureDbConnection(req, res, next) {
-  if (mongoose.connection.readyState !== 1) {
-    await mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-  }
-  next();
-}
-
-app.use(ensureDbConnection);
 
 app.use(cors({
   origin: ['https://khelo-satta-8hkv.vercel.app',
