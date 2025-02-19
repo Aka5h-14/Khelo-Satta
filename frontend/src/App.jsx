@@ -34,7 +34,8 @@ function App() {
   const [alertBoxTitle, setAlertBoxTitle] = useState("");
   const [alertBoxSeverity, setAlertBoxSeverity] = useState("warning");
 
-  const API = "https://khelo-satta.vercel.app/api/";
+  // const API = "https://khelo-satta.vercel.app/api/";
+  const API = "https://khelo.100xdev.me/api/";
   // const API = "http://localhost:3000/api/";
 
   const handleSetArray = async () => {

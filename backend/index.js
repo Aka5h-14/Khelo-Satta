@@ -32,7 +32,7 @@ store.on('error', function(error) {
 });
 
 app.use(cors({
-  origin: ['https://khelo-satta-8hkv.vercel.app',
+  origin: ['https://khelo-satta-8hkv.vercel.app', "https://khelo.100xdev.me"
   // 'http://localhost:5173'
   ],
   credentials: true
