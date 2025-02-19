@@ -1,17 +1,21 @@
 import * as React from 'react';
+import context from './MyContext';
+import { useContext } from "react";
 import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
 
-export default function AutohideSnackbar(props) {
-  const [open, setOpen] = React.useState(true);
+export default function AutohideSnackbar() {
+  // const [open, setOpen] = React.useState(false);
+
+  const {open, setOpen , alertMsg, alertSeverity} = useContext(context);
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
     setOpen(false);
   };
+
 
   return (
     <div>
@@ -22,11 +26,11 @@ export default function AutohideSnackbar(props) {
         onClose={handleClose}>
         <Alert
             onClose={handleClose}
-            severity="warning"
+            severity={alertSeverity || "warning"}
             variant="filled"
             sx={{ width: '100%' }}
         >
-            {props.message}
+            {alertMsg}
         </Alert>
         </Snackbar>
     </div>

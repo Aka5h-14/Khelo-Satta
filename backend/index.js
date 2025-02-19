@@ -17,9 +17,10 @@ async function connectToDatabase() {
     console.log("Connected to MongoDB successfully.");
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
-    process.exit(1); // Exit the process if the database connection fails
+    process.exit(1);
   }
 }
+connectToDatabase();
 
 const store = new MongoDBStore({
   uri: process.env.MONGO_URL ,

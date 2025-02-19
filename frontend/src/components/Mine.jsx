@@ -40,7 +40,11 @@ function Mine(props) {
     handleSetArray,
     uploadAmount,
     uploadData,
-    requests,
+    requests, open, setOpen,
+    alertMsg, setAlertMsg,
+    alertSeverity, setAlertSeverity, openBox ,setOpenBox,
+    alertBoxMsg, setAlertBoxMsg, alertBoxTitle, setAlertBoxTitle,
+    alertBoxSeverity, setAlertBoxSeverity,
   } = useContext(context);
 
   const [isLoading, setisLoading]= useState(false);
@@ -119,9 +123,14 @@ function Mine(props) {
             setMaxAmount(+a);
             setMltp(box.multiplier);
             setwin(true);
-            alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
+            setAlertBoxTitle('MAX WIN');
+            setAlertBoxMsg(`Winnings = ${maxAmount}<br/>Multiplier = ${mltp}.`);
+            setOpenBox(true);
+            // alert(`MAX WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
             handleSetArray();
             setgameOver(true);
+            setOpen(true);
+            setAlertMsg("Game Over");
             setCash((prev) => +prev + +a);
             setProfit((prev) => +prev + (+a - money));
             setMultiply(1);
@@ -131,11 +140,16 @@ function Mine(props) {
 
           if (box.block === 0) {
             setgameOver(true);
+            setOpen(true);
+            setAlertMsg("Game Over");
             const mny= money;
             await handleSetArray();
             setloss(true);
             setLossAmnt(mny);
-            alert(`LOSS \nMoney = ${mny}`)
+            setAlertBoxTitle('LOSS');
+            setAlertBoxMsg(`Money = ${mny}`);
+            setOpenBox(true);
+            // alert(`LOSS \nMoney = ${mny}`)
             uploadData(-money, money);
             uploadAmount(+cash);
             setProfit((prev) => prev - money);

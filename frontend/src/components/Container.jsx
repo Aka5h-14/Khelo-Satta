@@ -1,20 +1,28 @@
-import React, { useState, useCallback, useContext } from "react";
+import React, {  useContext } from "react";
 import Mines from "./Mines";
 import context from "./MyContext";
 import Alert from '@mui/material/Alert';
 import OutlinedAlerts from "./AlertGreen";
 
 function Container() {
-  const [ errorM, setErrorM ] = useState(false);
-  const [ win, setwin ] = useState(false);
-  const [ maxAmount, setMaxAmount ] = useState(0);
-  const [ mltp, setMltp ] = useState(0);
+  // const [ errorM, setErrorM ] = useState(false);
+  // const [ win, setwin ] = useState(false);
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated,isEnd, setisEnd, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+  // const [ maxAmount, setMaxAmount ] = useState(0);
+  // const [ mltp, setMltp ] = useState(0);
+
+  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated,isEnd, setisEnd, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests , open, setOpen,
+    alertMsg, setAlertMsg,
+    alertSeverity, setAlertSeverity, openBox ,setOpenBox,
+    alertBoxMsg, setAlertBoxMsg, alertBoxTitle, setAlertBoxTitle,
+    alertBoxSeverity, setAlertBoxSeverity,  } = useContext(context);
 
   function next() {
     if (money == 0) {
-      setErrorM(true);
+      setAlertSeverity('warning')
+      setAlertMsg("Add Bet");
+      setOpen(true);
+      // setErrorM(true);
       // alert("add bet");
     }
     if (gameOver) {
@@ -37,10 +45,19 @@ function Container() {
 
     if (!gameOver) {
       setgameOver(true);
+
+      setAlertSeverity('warning')
+      setAlertMsg("Game Over");
+      setOpen(true);
+
       const a = (money * multiply).toFixed(4);
-      setMaxAmount(+a);
-      setMltp(multiply);
-      setwin(true);
+      // setMaxAmount(+a);
+      // setMltp(multiply);
+
+      setAlertBoxTitle('WIN');
+      setAlertBoxMsg(`Winnings = ${a}<br/>Multiplier = ${multiply}.`);
+      setOpenBox(true);
+      // setwin(true);
       // alert(`WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
       
       await uploadAmount(+((cash + (money * multiply)).toFixed(4)));
@@ -55,8 +72,8 @@ function Container() {
 
   return (
     <>
-     <OutlinedAlerts display={errorM} setDisplay={setErrorM} type='warning' msg='Add bet.' /> 
-     <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} /> 
+     {/* <OutlinedAlerts display={errorM} setDisplay={setErrorM} type='warning' msg='Add bet.' /> 
+     <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} />  */}
 
       <div className="bg-slate-700 p-5 pt-8  border-b-2 border-white">
         <Mines />

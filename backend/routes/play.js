@@ -6,7 +6,7 @@ router.get("/play",authentification, function(req,res){
     const mines = req.query.mines;
   
     if(mines<1 || mines>24 || mines==null || mines==undefined){
-      res.send({msg :"wrong input of mines"});
+      res.send({msg :"Wrong input of mines"});
       return;
     }
   
@@ -52,7 +52,7 @@ router.get("/play",authentification, function(req,res){
     const session = req.session;
       session.gameState = { aray: createArray() , multiplier: multiplier(), gameOver: false}; 
       res.send({
-        msg: "game ready to play"
+        msg: "Game ready to play"
       });
     
   })

@@ -25,6 +25,15 @@ function App() {
   const [bet, setBet] = useState(0);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const [alertMsg, setAlertMsg] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("warning");
+  const [open, setOpen] =useState(false);
+
+  const [openBox, setOpenBox] =useState(false);
+  const [alertBoxMsg, setAlertBoxMsg] = useState("");
+  const [alertBoxTitle, setAlertBoxTitle] = useState("");
+  const [alertBoxSeverity, setAlertBoxSeverity] = useState("warning");
+
   const API = "https://khelo-satta.vercel.app/api/";
   // const API = "http://localhost:3000/api/";
 
@@ -103,6 +112,15 @@ function App() {
         uploadData,
 
         requests,
+
+        open, setOpen,
+        alertMsg, setAlertMsg,
+        alertSeverity, setAlertSeverity,
+
+        openBox, setOpenBox,
+        alertBoxMsg, setAlertBoxMsg,
+        alertBoxTitle, setAlertBoxTitle,
+        alertBoxSeverity, setAlertBoxSeverity,
       }}
     >
       <BrowserRouter>

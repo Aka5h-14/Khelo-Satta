@@ -1,14 +1,16 @@
 import context from "./MyContext";
 import { useCallback, useContext, useState } from "react";
-import OutlinedAlerts from "./AlertGreen";
+// import OutlinedAlerts from "./AlertGreen";
 
 export default function Bet(){
 
-    const [error, setError ] = useState(false);
+    // const [error, setError ] = useState(false);
 
-    const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
+    const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests , open, setOpen,
+        alertMsg, setAlertMsg,
+        alertSeverity, setAlertSeverity,  } = useContext(context);
 
-    const [paisa,setPaisa] =useState(0);
+    const [paisa,setPaisa] =useState(0); 
 
     const Add = useCallback( async()=> {
         await uploadAmount(+cash + +paisa);
@@ -25,7 +27,10 @@ export default function Bet(){
             setMoney(+money + +bet);
         }
         else{
-            setError(true);
+            setAlertSeverity('warning')
+            setAlertMsg("Wrong bet amount.");
+            setOpen(true);
+            // setError(true);
             // alert("wrong bet amount")
         }
     };
@@ -33,7 +38,7 @@ export default function Bet(){
 
 
     return(<>
-    <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg='Wrong bet amount.' /> 
+    {/* <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg='Wrong bet amount.' />  */}
 
     <div className="border-y-2 border-white bg-slate-700 grid-cols-1 py-2 text-xs xg:text-base md:text-lg">
         <div className="flex justify-center mb-5" >
