@@ -25,9 +25,23 @@ if (process.env.NODE_ENV === 'production') {
 const mongoOptions = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 30000, // Timeout after 30 seconds
-  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-  family: 4 // Use IPv4, skip trying IPv6
+  serverSelectionTimeoutMS: 30000,
+  socketTimeoutMS: 45000,
+  family: 4,
+  ssl: true,
+  tls: true,
+  tlsInsecure: false,
+  retryWrites: true,
+  w: 'majority',
+  maxPoolSize: 10,
+  minPoolSize: 0,
+  maxIdleTimeMS: 30000,
+  connectTimeoutMS: 30000,
+  // Explicitly set TLS version for MongoDB Atlas
+  tlsCAFile: undefined, // Let MongoDB driver handle the CA file
+  tlsAllowInvalidCertificates: false,
+  tlsAllowInvalidHostnames: false,
+  directConnection: false // Allow for replica set connections
 };
 
 // Connection retry logic with better error handling
@@ -41,17 +55,36 @@ async function connectWithRetry() {
         throw new Error('MONGO_URL environment variable is not set');
       }
 
+      // Parse the MongoDB URL to ensure it has the right parameters
+      let mongoUrl = process.env.MONGO_URL;
+      if (!mongoUrl.includes('retryWrites=true')) {
+        mongoUrl += (mongoUrl.includes('?') ? '&' : '?') + 'retryWrites=true';
+      }
+      if (!mongoUrl.includes('w=majority')) {
+        mongoUrl += '&w=majority';
+      }
+
       console.log(`MongoDB connection attempt ${i + 1} of ${maxRetries}`);
-      await mongoose.connect(process.env.MONGO_URL, mongoOptions);
+      await mongoose.connect(mongoUrl, mongoOptions);
       console.log("Connected to MongoDB successfully.");
       isConnected = true;
       break;
     } catch (error) {
       console.error(`MongoDB connection attempt ${i + 1} failed:`, error.message);
+      console.error('Full error:', error);
+      
       if (error.message.includes('MONGO_URL environment variable is not set')) {
         console.error('Please set the MONGO_URL environment variable');
         process.exit(1);
       }
+
+      // Handle specific MongoDB errors
+      if (error.name === 'MongoNetworkTimeoutError') {
+        console.error('Network timeout error. Please check your network connection and MongoDB Atlas network settings.');
+      } else if (error.name === 'MongoNetworkError') {
+        console.error('Network error. Please check if MongoDB Atlas IP whitelist includes Render IPs.');
+      }
+
       if (i < maxRetries - 1) {
         console.log(`Retrying in ${retryDelay/1000} seconds...`);
         await new Promise(resolve => setTimeout(resolve, retryDelay));
