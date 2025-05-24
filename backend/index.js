@@ -21,19 +21,37 @@ if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-// Connection retry logic
+// MongoDB connection options
+const mongoOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 30000, // Timeout after 30 seconds
+  socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+  family: 4 // Use IPv4, skip trying IPv6
+};
+
+// Connection retry logic with better error handling
 async function connectWithRetry() {
   const maxRetries = 5;
   const retryDelay = 5000;
 
   for (let i = 0; i < maxRetries; i++) {
     try {
-      await mongoose.connect(process.env.MONGO_URL);
+      if (!process.env.MONGO_URL) {
+        throw new Error('MONGO_URL environment variable is not set');
+      }
+
+      console.log(`MongoDB connection attempt ${i + 1} of ${maxRetries}`);
+      await mongoose.connect(process.env.MONGO_URL, mongoOptions);
       console.log("Connected to MongoDB successfully.");
       isConnected = true;
       break;
     } catch (error) {
       console.error(`MongoDB connection attempt ${i + 1} failed:`, error.message);
+      if (error.message.includes('MONGO_URL environment variable is not set')) {
+        console.error('Please set the MONGO_URL environment variable');
+        process.exit(1);
+      }
       if (i < maxRetries - 1) {
         console.log(`Retrying in ${retryDelay/1000} seconds...`);
         await new Promise(resolve => setTimeout(resolve, retryDelay));
@@ -45,17 +63,37 @@ async function connectWithRetry() {
   }
 }
 
+// Handle MongoDB connection events
+mongoose.connection.on('connected', () => {
+  console.log('Mongoose connected to MongoDB');
+  isConnected = true;
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('Mongoose connection error:', err);
+  isConnected = false;
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('Mongoose disconnected');
+  isConnected = false;
+  // Try to reconnect
+  if (!process.env.MONGO_URL) {
+    console.error('MONGO_URL environment variable is not set');
+    return;
+  }
+  setTimeout(connectWithRetry, 5000);
+});
+
+// Initialize connection
 connectWithRetry();
 
-// Initialize store with retry mechanism
+// Initialize store with retry mechanism and better error handling
 const store = new CachedSessionStore({
   uri: process.env.MONGO_URL,
   databaseName: 'mines',
   collection: 'Sessions',
-  connectionOptions: {
-    maxPoolSize: 10,
-    serverSelectionTimeoutMS: 10000,
-  }
+  connectionOptions: mongoOptions
 });
 
 store.on('connected', () => {
