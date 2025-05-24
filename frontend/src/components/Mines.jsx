@@ -6,46 +6,24 @@ import OutlinedAlerts from "./AlertGreen";
 function Mines() {
 
   const { array,
-    setArray,
     cash,
     setCash,
     money,
-    setMoney,
-    profit,
-    setProfit,
     play,
-    setPlay,
-    mines,
-    setMines,
-    gameOver,
-    setgameOver,
-    multiply,
-    setMultiply,
-    clickedIndices,
-    setClickedIndices,
-    bet,
-    setBet,
-    isAuthenticated, setIsAuthenticated,
-    API,
-    handleSetArray,
-    uploadAmount,
-    uploadData,
-    requests , open, setOpen,
-    alertMsg, setAlertMsg,
-    alertSeverity, setAlertSeverity,  } = useContext(context);
-
-    // const [error, setError ] = useState(false);
-    // const [Data, setData ] = useState(false);
+    requests, setOpen,
+    setAlertMsg,
+    setAlertSeverity,  } = useContext(context);
   
 
     useEffect(() => {
       const fetchData = async () => {
         if (money > 0) {
-          // setError(true);
           try {
             const msg = await requests();
             setAlertMsg(msg);
             if(msg=="Game ready to play"){
+              // need to change bet
+              setCash(+cash - +money);
               setAlertSeverity('success')
             }
             else{
@@ -53,10 +31,8 @@ function Mines() {
             }
             setOpen(true);
 
-            // setData(await requests());
           } catch (error) {
             setAlertMsg('Error fetching data:');
-            // setData('Error fetching data:',error)
             console.error('Error fetching data:', error);
           }
         }
@@ -68,8 +44,7 @@ function Mines() {
 
   return (
     <>
-  {/* <OutlinedAlerts className=" fixed top-2 " display={error} setDisplay={setError} type='success' msg={Data} /> */}
-    <div className="mx-auto w-80 xg:w-96 p-5 rounded grid grid-cols-5 gap-5 bg-slate-600">
+    <div className="w-full max-w-[350px] xs:max-w-[400px] mx-auto p-2 xs:p-3 sm:p-5 rounded grid grid-cols-5 gap-2 xs:gap-3 sm:gap-4 md:gap-5 bg-transparent">
       {array.map((block, index) => (
         <Mine
           key={index}
@@ -78,9 +53,6 @@ function Mines() {
         ></Mine>
       ))}
     </div>
-    {/* {
-      gameOver==true ? <AutohideSnackbar message="Game Over"/>  : ""
-    } */}
     
     </>
   );

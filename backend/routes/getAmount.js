@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { authentification } = require("../middleware/authen");
-const {user} = require('../db');
+const {user} = require('../config/db');
 const router = Router();
 
 router.get("/getAmount",authentification, async function(req,res){

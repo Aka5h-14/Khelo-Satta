@@ -26,22 +26,37 @@ function classNames(...classes) {
 
 export default function Navbar() {
 
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated,API, handleSetArray,uploadAmount,uploadData,  requests  } = useContext(context);
- 
+  const { setIsAuthenticated, setCash, setMoney, setProfit, setPlay, setMines, setgameOver, setClickedIndices, isAuthenticated, API } = useContext(context);
+
   const navigate = useNavigate();
 
   async function logOut() {
-    const send = await axios.post(
-      API+"signOut",
-      {},
-      { withCredentials: true }
-    );
+    try {
+      const send = await axios.post(
+        API + "signOut",
+        {},
+        { withCredentials: true }
+      );
 
-    if (send.data.message == "Logged out successfully.") {
-      setIsAuthenticated(false);
-      navigate("/");
+      if (send.data.message == "Logged out successfully.") {
+        // Clear all cookies
+        document.cookie.split(";").forEach(function (c) {
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+
+        setIsAuthenticated(false);
+        setCash(0);
+        setMoney(0);
+        setProfit(0);
+        setPlay(0);
+        setgameOver(true);
+        setClickedIndices([]);
+
+        navigate("/");
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
     }
-    // alert(send.data.message);
   }
 
   return (
@@ -124,21 +139,21 @@ export default function Navbar() {
               </MenuItems>
             </Menu> */}
 
-            
-              {isAuthenticated ? (
-                <button
-                  className="text-white bg-red-500 p-2 rounded"
-                  onClick={logOut}
-                >
-                  Log Out
-                </button>
-              ) : (
-                <button
-                  className="text-white bg-green-500 p-2 rounded"
-                  onClick={()=> {navigate("/")}}
-                >
-                  Sign In
-                </button>)
+
+            {isAuthenticated ? (
+              <button
+                className="text-white bg-red-500 p-2 rounded"
+                onClick={logOut}
+              >
+                Log Out
+              </button>
+            ) : (
+              <button
+                className="text-white bg-green-500 p-2 rounded"
+                onClick={() => { navigate("/") }}
+              >
+                Sign In
+              </button>)
             }
 
           </div>

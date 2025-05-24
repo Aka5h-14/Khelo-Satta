@@ -4,6 +4,7 @@ const router = Router();
 
 router.get("/play",authentification, function(req,res){
     const mines = req.query.mines;
+    const bet = req.query.bet;
   
     if(mines<1 || mines>24 || mines==null || mines==undefined){
       res.send({msg :"Wrong input of mines"});
@@ -21,10 +22,7 @@ router.get("/play",authentification, function(req,res){
     }
   
     function createArray(){
-      let arr=[];
-      for(let i=0;i<25;++i){
-        arr[i]=1;
-      }
+      let arr = new Array(25).fill(1);
   
       getRandomMines().map( (index)=> {
         arr[index]=0;
@@ -34,10 +32,6 @@ router.get("/play",authentification, function(req,res){
   
     function multiplier(){
       let multiply=[];
-      if(mines == 0){
-        multiply.push(1);
-        return multiply;
-      }
   
       for(let i=0 ; i<25-mines ;i++){
         let probablity = (25-mines-i)/(25-i);
@@ -50,11 +44,22 @@ router.get("/play",authentification, function(req,res){
     }
   
     const session = req.session;
-      session.gameState = { aray: createArray() , multiplier: multiplier(), gameOver: false}; 
-      res.send({
-        msg: "Game ready to play"
-      });
+    session.gameState = { 
+      aray: createArray(), 
+      multiplier: multiplier(), 
+      clickedIndices: [], 
+      bet: bet, 
+      gameOver: false
+    }; 
     
-  })
+    // Explicitly save session to ensure game state is stored in Redis
+    session.save(err => {
+      if (err) {
+        console.error('Error saving session:', err);
+        return res.status(500).json({ msg: "Error initializing game" });
+      }
+      res.send({ msg: "Game ready to play" });
+    });
+})
 
 module.exports = router;

@@ -1,100 +1,139 @@
-import React, {  useContext } from "react";
+import React, { useContext } from "react";
 import Mines from "./Mines";
 import context from "./MyContext";
-import Alert from '@mui/material/Alert';
-import OutlinedAlerts from "./AlertGreen";
+import { formatRupees } from "../utils/money";
+import Bet from "./Bet";
 
 function Container() {
-  // const [ errorM, setErrorM ] = useState(false);
-  // const [ win, setwin ] = useState(false);
-
-  // const [ maxAmount, setMaxAmount ] = useState(0);
-  // const [ mltp, setMltp ] = useState(0);
-
-  const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver,multiply,setMultiply, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated,isEnd, setisEnd, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests , open, setOpen,
-    alertMsg, setAlertMsg,
-    alertSeverity, setAlertSeverity, openBox ,setOpenBox,
-    alertBoxMsg, setAlertBoxMsg, alertBoxTitle, setAlertBoxTitle,
-    alertBoxSeverity, setAlertBoxSeverity,  } = useContext(context);
+  const {
+    setArray,
+    cash, setCash,
+    money, setMoney,
+    setProfit,
+    play, setPlay,
+    gameOver, setgameOver,
+    multiply, setMultiply,
+    setClickedIndices,
+    handleSetArray, cashOutFunc,
+    setOpen, setAlertMsg, setAlertSeverity,
+    setOpenBox, setAlertBoxMsg, setAlertBoxTitle, setAlertBoxSeverity,
+    setHighestWin,
+  } = useContext(context);
 
   function next() {
-    if (money == 0) {
-      setAlertSeverity('warning')
-      setAlertMsg("Add Bet");
+    if (money === 0) {
+      setAlertSeverity('warning');
+      setAlertMsg("Please add a bet to play");
       setOpen(true);
-      // setErrorM(true);
-      // alert("add bet");
+      return;
     }
     if (gameOver) {
-      setArray([
-        -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-        -1, -1, -1, -1, -1, -1, -1,
-      ]);
-
+      setArray(new Array(25).fill(-1));
       setMultiply(1);
       setClickedIndices([]);
     }
     setPlay(play + 1);
   }
 
-  const end = async () => {
-    if (clickedIndices.length == 0) {
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 900));
+  async function cashOut() {
 
-    if (!gameOver) {
+    try {
+      const data = await cashOutFunc();
+
+      const winAmountPaisa = data.winAmount;
+      setHighestWin(prev => Math.max(prev, winAmountPaisa));
+      handleSetArray(data.array);
+
+      // await Promise.all([
+      //   uploadAmount(cash + winAmountPaisa),
+      //   uploadData(winAmountPaisa, money),
+      // ]);
+
+      setAlertBoxTitle('Cash Out Success!');
+      setAlertBoxMsg(`
+        <div class="space-y-3">
+          <p class="text-lg font-medium text-green-400">Well played!</p>
+          <div class="space-y-2">
+            <p>Winnings: <span class="text-yellow-400">${formatRupees(winAmountPaisa)}</span></p>
+            <p>Multiplier: <span class="text-indigo-400">${multiply}x</span></p>
+          </div>
+        </div>
+      `);
+      setAlertBoxSeverity('success');
+      setOpenBox(true);
+
+      setProfit(prev => prev + (winAmountPaisa - money));
       setgameOver(true);
 
-      setAlertSeverity('warning')
-      setAlertMsg("Game Over");
-      setOpen(true);
-
-      const a = (money * multiply).toFixed(4);
-      // setMaxAmount(+a);
-      // setMltp(multiply);
-
-      setAlertBoxTitle('WIN');
-      setAlertBoxMsg(`Winnings = ${a}<br/>Multiplier = ${multiply}.`);
-      setOpenBox(true);
-      // setwin(true);
-      // alert(`WIN \nWinnings = ${maxAmount}\nMultiplier = ${mltp}`)
-      
-      await uploadAmount(+((cash + (money * multiply)).toFixed(4)));
-      await uploadData(+a, money);
-      handleSetArray();
-      setCash(+cash + +a);
-      setProfit(+profit + +(((money * multiply)-money).toFixed(4)));
-      setMultiply(1);
       setMoney(0);
+      setMultiply(1);
+
+    } catch (error) {
+      console.error('Error during cashout:', error);
+
+      setAlertBoxTitle('Cash Out Failed');
+      setAlertBoxMsg(`
+        <div class="space-y-3">
+          <p class="text-lg font-medium text-red-400">Error Processing Cashout</p>
+          <p>Please try again. If the problem persists, contact support.</p>
+        </div>
+      `);
+      setAlertBoxSeverity('error');
+      setOpenBox(true);
     }
-  };
+  }
 
   return (
-    <>
-     {/* <OutlinedAlerts display={errorM} setDisplay={setErrorM} type='warning' msg='Add bet.' /> 
-     <OutlinedAlerts display={win} setDisplay={setwin} type='success' msg={`Winnings = ${maxAmount} , Multiplier = ${mltp}.`} />  */}
+    <div className="flex flex-col md:p-10 md:flex-row md:gap-6 md:mx-auto">
+      {/* Betting Controls Section */}
+      <div className="mt-1 mb-5 md:mb-0 mx-auto md:mt-0 w-full xs:w-[280px] xg:w-[310px] sm:w-[350px] md:basis-1/3 lg:basis-3/10">
+        <Bet />
+      </div>
 
-      <div className="bg-slate-700 p-5 pt-8  border-b-2 border-white">
-        <Mines />
-        <div className="flex justify-evenly pt-5 text-xs xg:text-base md:text-lg"> 
-          <p className="border-2 border-black bg-slate-600 text-white p-2 ">Multplier = {multiply}</p>
-          <p className="border-2 border-black bg-slate-600 text-white p-2 ">
-            Current winning = {(money * multiply).toFixed(4)}
-          </p>
+      {/* Main Game Section */}
+      <div className="flex flex-col space-y-4 md:basis-2/3 lg:basis-7/10">
+        {/* Game Grid */}
+        <div className=" w-full bg-gray-900/50 rounded-lg">
+          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent pointer-events-none" />
+          <Mines />
         </div>
-        <div className="flex justify-evenly pt-5 text-xs xg:text-base md:text-lg font-bold">
-          <button onClick={next} className="rounded border-2 p-2 px-3 border-slate-900 bg-green-500 hover:bg-green-600 hover:scale-105 text-white">
-            Play
-          </button>
-          { gameOver ? '':
-            <button onClick={end} className="rounded border-2 p-2 px-3 border-slate-900 bg-green-500 hover:bg-green-600 hover:scale-105 text-white">
+
+        {/* Game Stats */}
+        <div className="flex justify-evenly w-full">
+          <div className="card bg-opacity-90 backdrop-blur xs:p-2 xs:px-5 md:p-3 md:px-7">
+            <div className="text-xs xg:text-sm md:text-base text-gray-400">Multiplier</div>
+            <div className="text-xs xg:text-base sm:text-lg font-bold text-indigo-400 text-center">{multiply}x</div>
+          </div>
+          <div className="card bg-opacity-90 backdrop-blur xs:p-2 xs:px-5 md:p-3 md:px-7">
+            <div className="text-xs xg:text-sm md:text-base text-gray-400">Potential Win</div>
+            <div className="text-xs xg:text-base sm:text-lg font-bold text-green-400 text-center">
+              {formatRupees(Math.floor(money * multiply))}
+            </div>
+          </div>
+        </div>
+
+        {/* Game Controls */}
+        <div className="flex justify-center gap-3 w-full">
+          {gameOver && (
+            <button
+              onClick={next}
+              className="button-primary px-6 py-2.5 text-sm sm:text-base font-bold"
+            >
+              Play Game
+            </button>
+          )}
+
+          {!gameOver && (
+            <button
+              onClick={cashOut}
+              className="button-secondary px-6 py-2.5 text-sm sm:text-base font-bold bg-green-600 hover:bg-green-700"
+            >
               Cash Out
             </button>
-          }
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

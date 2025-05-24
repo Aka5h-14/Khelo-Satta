@@ -2,15 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes growShrink {
-    0%, 100% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-  }
-  
-  .animate-grow-shrink {
-    animation: growShrink 0.5s ease-in-out infinite;
-  }
+:root {
+  --primary: #4F46E5;
+  --primary-dark: #4338CA;
+  --secondary: #10B981;
+  --accent: #F59E0B;
+  --background: #1F2937;
+  --surface: #374151;
+  --text: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --danger: #EF4444;
+  --success: #10B981;
+}
+
+body {
+  @apply bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen text-gray-100;
+}
+
+.game-container {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8;
+}
+
+.card {
+  @apply bg-gray-800 rounded-xl shadow-lg border border-gray-700 p-6;
+  background: rgba(31, 41, 55, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.button-primary {
+  @apply bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg 
+         transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 
+         focus:ring-indigo-500 focus:ring-opacity-50;
+}
+
+.button-secondary {
+  @apply bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg
+         transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2
+         focus:ring-gray-500 focus:ring-opacity-50;
+}
+
+.input-field {
+  @apply bg-gray-700 border border-gray-600 text-white rounded-lg px-4 py-2
+         focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+}
+
+.grid-mines {
+  @apply grid gap-2 p-4;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.mine-cell {
+  @apply aspect-square rounded-lg transition-all duration-200 transform hover:scale-105
+         flex items-center justify-center cursor-pointer;
+  background: linear-gradient(145deg, #2d3748, #1a202c);
+  box-shadow: 5px 5px 10px #151920, -5px -5px 10px #374151;
+}
+
+.mine-cell.revealed {
+  @apply bg-gray-700;
+}
+
+.stats-card {
+  @apply flex items-center space-x-2 bg-gray-800 rounded-lg p-4 border border-gray-700;
+}
+
+.stats-label {
+  @apply text-gray-400 text-sm font-medium;
+}
+
+.stats-value {
+  @apply text-white text-lg font-bold;
+}
+
+.glow-effect {
+  @apply relative overflow-hidden;
+}
+
+.glow-effect::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0;
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.glow-effect:hover::before {
+  transform: translateX(100%);
+  opacity: 0.1;
+}
+
+.animate-grow-shrink {
+  animation: grow-shrink 0.5s ease-in-out;
+}
+
+@keyframes grow-shrink {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}

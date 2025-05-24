@@ -1,18 +1,27 @@
 const { Router } = require("express");
 const { authentification } = require("../middleware/authen");
-const {user} = require('../db');
+const {user} = require('../config/db');
 const router = Router();
 
 router.post("/updateUser", authentification ,async function (req,res){
     const data = req.body;
     let id = req.session.UserId;
-    const found=await user.findByIdAndUpdate(id, { money: data.money });
-    if(found){
-      res.send("money updated");
+    try {
+      const found = await user.findByIdAndUpdate(
+        id, 
+        { $inc: { money: data.money } },
+        { new: true }
+      );
+      
+      if(found){
+        res.json({ success: true, balance: found.money });
+      } else {
+        res.status(404).json({ success: false, message: "User not found" });
+      }
+    } catch (error) {
+      console.error('Error updating money:', error);
+      res.status(500).json({ success: false, message: "Failed to update balance" });
     }
-    else{
-      res.send("money not updated");
-    }
-  })
+})
 
 module.exports = router;

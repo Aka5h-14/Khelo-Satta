@@ -1,99 +1,167 @@
 import context from "./MyContext";
-import { useCallback, useContext, useState } from "react";
-// import OutlinedAlerts from "./AlertGreen";
+import { useCallback, useContext, useState, useRef } from "react";
+import OutlinedAlerts from "./AlertGreen";
+import { paisaToRupees, rupeesToPaisa, formatRupees, validateAndConvertAmount } from "../utils/money";
 
-export default function Bet(){
+export default function Bet() {
+    const { 
+        cash, setCash,
+        money, setMoney,
+        mines, setMines,
+        gameOver,
+        uploadAmount,
+        setOpen,
+        setAlertMsg,
+        setAlertSeverity,
+    } = useContext(context);
 
-    // const [error, setError ] = useState(false);
+    const betInputRef = useRef(null);
+    const moneyInputRef = useRef();
 
-    const { array, setArray , cash,setCash, money,setMoney ,profit, setProfit, play,setPlay, mines,setMines, gameOver,setgameOver, clickedIndices, setClickedIndices,bet,setBet,isAuthenticated, setIsAuthenticated, handleSetArray,uploadAmount,uploadData,  requests , open, setOpen,
-        alertMsg, setAlertMsg,
-        alertSeverity, setAlertSeverity,  } = useContext(context);
-
-    const [paisa,setPaisa] =useState(0); 
-
-    const Add = useCallback( async()=> {
-        await uploadAmount(+cash + +paisa);
-        setCash(+cash + +paisa);
+    const Add = useCallback(async () => {
+        const inputAmount = moneyInputRef.current.value;
+        const paisaAmount = validateAndConvertAmount(inputAmount);
+        
+        if (paisaAmount > 0) {
+            let data = await uploadAmount(paisaAmount);
+            if(data.success){
+                setCash(data.balance);
+                setAlertMsg("Amount added successfully");
+                setAlertSeverity("success");
+                setOpen(true);
+            }
+            moneyInputRef.current.value = "";
+        }
     });
 
     const handleMines = useCallback((e) => {
-            setMines(e.target.value)
+        const value = Math.min(24, Math.max(0, e.target.value));
+        setMines(value);
     });
 
-    function changeBet () {
-        if((cash>=bet) && (bet>0)){
-            setCash(+cash - +bet);
-            setMoney(+money + +bet);
-        }
-        else{
-            setAlertSeverity('warning')
-            setAlertMsg("Wrong bet amount.");
+    const quickBets = [100, 500, 1000, 5000]; // Values in rupees
+
+    function changeBet() {
+        const betAmount = rupeesToPaisa(betInputRef.current.value);
+        if (cash >= betAmount && betAmount > 0) {
+            setMoney(betAmount);
+        } else {
+            setAlertMsg("Invalid bet amount");
+            setAlertSeverity("error");
             setOpen(true);
-            // setError(true);
-            // alert("wrong bet amount")
         }
     };
 
+    const handleQuickBet = (amountInRupees) => {
+        betInputRef.current.value = amountInRupees;
+    };
 
+    return (
+        <div className="space-y-2 xs:space-y-3">
+            {/* Balance Section */}
+            <div className="space-y-1.5 xs:space-y-2">
+                <h3 className="text-xs xs:text-sm sm:text-base font-semibold text-gray-200">Add Balance</h3>
+                <div className="flex flex-col gap-1.5 xs:gap-2">
+                    <div className="stats-card p-1.5 xs:p-2">
+                        <span className="text-xs xs:text-sm sm:text-base">{formatRupees(cash)}</span>
+                    </div>
+                    <div className="flex gap-1.5 xs:gap-2">
+                        <input
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            placeholder="Amount"
+                            ref={moneyInputRef}
+                            className="input-field flex-1 basis-2/3 text-xs xs:text-sm p-1.5 xs:p-2"
+                        />
+                        <button 
+                            onClick={Add} 
+                            className="button-primary basis-1/3 whitespace-nowrap text-xs xs:text-sm p-1.5 xs:p-2"
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-    return(<>
-    {/* <OutlinedAlerts display={error} setDisplay={setError} type='warning' msg='Wrong bet amount.' />  */}
+            {/* Betting Section */}
+            <div className="space-y-1.5 xs:space-y-2">
+                <h3 className="text-xs xs:text-sm sm:text-base font-semibold text-gray-200">Place Bet</h3>
+                <div className="space-y-1.5 xs:space-y-2">
+                    <div className="flex flex-col gap-1.5 xs:gap-2">
+                        <div className="stats-card p-1.5 xs:p-2">
+                            <span className="text-xs xs:text-sm sm:text-base">{formatRupees(money)}</span>
+                        </div>
+                        <div className="flex gap-1.5 xs:gap-2">
+                            <input
+                                ref={betInputRef}
+                                type="number"
+                                min="0"
+                                step="0.01"
+                                placeholder="Bet amount"
+                                className="input-field flex-1 basis-2/3 text-xs xs:text-sm p-1.5 xs:p-2"
+                            />
+                            <button 
+                                onClick={changeBet} 
+                                className="button-primary basis-1/3 whitespace-nowrap text-xs xs:text-sm p-1.5 xs:p-2" 
+                                disabled={!gameOver}
+                            >
+                                Bet
+                            </button>
+                        </div>
+                    </div>
 
-    <div className="border-y-2 border-white bg-slate-700 grid-cols-1 py-2 text-xs xg:text-base md:text-lg">
-        <div className="flex justify-center mb-5" >
-            <div className="border-2 border-black bg-slate-600 text-white p-2 font-bold">₹ {cash}</div>
-            <input className="p-2 mx-2 border-2 border-black bg-slate-800 text-white text-center w-40" type="number" min="0"  placeholder="Amount" onChange={(e)=> {if(e.target.value>0)setPaisa(e.target.value)}} />
-            <button onClick={Add} className=" rounded border-2 p-1 border-slate-900 bg-green-500 hover:bg-green-600 hover:scale-105 text-white"  >Add money</button>
+                    {/* Quick Bet Buttons */}
+                    <div className="grid grid-cols-4 gap-1 xs:gap-1.5">
+                        {quickBets.map(amount => (
+                            <button
+                                key={amount}
+                                onClick={() => handleQuickBet(amount)}
+                                className="button-secondary text-[10px] xs:text-xs p-1 xs:p-1.5"
+                                disabled={!gameOver}
+                            >
+                                ₹{amount}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
-
+            {/* Mines Selection */}
+            <div className="space-y-1.5 xs:space-y-2">
+                <h3 className="text-xs xs:text-sm sm:text-base font-semibold text-gray-200">Mines</h3>
+                <div className="space-y-1.5 xs:space-y-2">
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="range"
+                            min="1"
+                            max="24"
+                            value={mines}
+                            onChange={handleMines}
+                            className="flex-1 h-1 xs:h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        />
+                        <input
+                            type="number"
+                            value={mines}
+                            min="1"
+                            max="24"
+                            onChange={handleMines}
+                            className="input-field w-12 xs:w-14 text-center text-xs xs:text-sm p-1 xs:p-1.5"
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 gap-1 xs:gap-1.5">
+                        {[1, 3, 5, 10].map(num => (
+                            <button
+                                key={num}
+                                onClick={() => setMines(num)}
+                                className={`button-secondary text-[10px] xs:text-xs p-1 xs:p-1.5 ${mines === num ? 'bg-indigo-600' : ''}`}
+                            >
+                                {num}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className=" xg:px-14 md:px-20 grid-cols-1 md:flex justify-around">
-            <div className="flex justify-center pb-2 md:pb-0">
-                <div className="border-2 text-center border-black bg-slate-600  text-white p-2 font-bold">Bet - ₹{money}</div>
-                <input className="p-2 mx-2 border-2 border-black bg-slate-800 text-white text-center w-40" type="number" min="0"  placeholder="Bet Amount" onChange={e => setBet(e.target.value)}  />
-                <button onClick={changeBet} className="rounded border-2 p-1 border-slate-900 bg-green-500 hover:bg-green-600 hover:scale-105 text-white" >Add bet</button>
-            </div>
-            <div className="flex justify-center">
-                <span className="border-2 text-center border-black bg-slate-600  text-white p-2 font-bold">No of Mines</span>
-                <input
-                type="number"
-                value={mines}
-                min="0"
-                max="24"
-                onChange={handleMines}
-                className="p-2 mx-2 border-2 border-black bg-slate-800 text-white text-center w-20"
-                />
-                {/* <input className="p-2 mx-2 border-2 border-black bg-slate-800 text-white text-center w-20" list="Mines" value={mines} onChange={handleMines}/>
-        <datalist id="Mines">
-            <option value='1'/>
-            <option value='2' />
-            <option value='3' />
-            <option value='4' />
-            <option value='5' />
-            <option value='6' />
-            <option value='7' />
-            <option value='8' />
-            <option value='9' />
-            <option value='10' />
-            <option value='11' />
-            <option value='12' />
-            <option value='13' />
-            <option value='14' />
-            <option value='15' />
-            <option value='16' />
-            <option value='17' />
-            <option value='18' />
-            <option value='19' />
-            <option value='20' />
-            <option value='21' />
-            <option value='22' />
-            <option value='23' />
-            <option value='24' />
-        </datalist> */}
-            </div>
-        </div>  
-    </div>  
-    </>
-    )
+    );
 }

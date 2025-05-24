@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const bcrypt = require('bcryptjs');
-const {user} = require('../db');
-const {schema2} = require('../test');
+const {user} = require('../config/db');
+const {schema2} = require('../zodType/test');
 const router = Router();
 
 
@@ -24,7 +24,7 @@ router.post("/signin", async function(req,res){
     if(bcrypt.compareSync(data.password, users.password)){
       const session = req.session;
       session.authen=true;
-      session.UserId=users._id;
+      session.UserId=users._id; 
       session.save();
 
       res.status(200).send({

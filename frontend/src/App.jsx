@@ -1,77 +1,91 @@
+import "./App.css";
+import { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import axios from "axios";
+axios.defaults.withCredentials = true;
 import context from "./components/MyContext";
 import Navbar from "./components/Navbar";
 import Signin from "./components/Signin";
 import Signup from "./components/Signup";
-import "./App.css";
-import axios from "axios";
-axios.defaults.withCredentials = true;
-import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Game from "./components/Game";
+import AutohideSnackbar from "./components/SnackBar";
+import AlertDialogSlide from "./components/Alert";
+import { checkAuthStatus } from "./utils/auth";
 
 function App() {
-  const [array, setArray] = useState([
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1,
-  ]);
-  const [cash, setCash] = useState(0);
-  const [money, setMoney] = useState(0);
-  const [profit, setProfit] = useState(0);
-  const [play, setPlay] = useState(0);
-  const [mines, setMines] = useState(1);
-  const [gameOver, setgameOver] = useState(false);
-  const [multiply, setMultiply] = useState(1);
-  const [clickedIndices, setClickedIndices] = useState([]);
-  const [bet, setBet] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [array, setArray] = useState(new Array(25).fill(-1));
 
+  const [cash, setCash] = useState(0); // money in main wallet
+  const [money, setMoney] = useState(0);  // bet amount
+  const [profit, setProfit] = useState(0); // amount of money earned (excluding bet) (all amount in a single sitting)
+  // const [bet, setBet] = useState(0);  // bet amount for frontend use
+  const [multiply, setMultiply] = useState(1); // currentmultiplier
+  const [highestWin, setHighestWin] = useState(0); // highest win amount
+  const [mines, setMines] = useState(1);  // no of mines
+  const [play, setPlay] = useState(0); // count of games played
+  const [clickedIndices, setClickedIndices] = useState([]);  // array of clicked indices
+  const [gameOver, setgameOver] = useState(true);  // true means game is over
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // true means user is authenticated
+
+  // top alert msg
   const [alertMsg, setAlertMsg] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("warning");
-  const [open, setOpen] =useState(false);
+  const [open, setOpen] = useState(false);
 
-  const [openBox, setOpenBox] =useState(false);
+  // alert box
+  const [openBox, setOpenBox] = useState(false);
   const [alertBoxMsg, setAlertBoxMsg] = useState("");
   const [alertBoxTitle, setAlertBoxTitle] = useState("");
   const [alertBoxSeverity, setAlertBoxSeverity] = useState("warning");
 
   // const API = "https://khelo-satta.vercel.app/api/";
-  const API = "https://khelo.100xdev.me/api/";
-  // const API = "http://localhost:3000/api/";
+  // const API = "https://khelo.100xdev.me/api/";
+  const API = "https://localhost:3000/api/";
 
-  const handleSetArray = async () => {
-    let obj = await sendData();
-    setArray([...obj.array]);
+
+  // sets the mines array after game over
+  const handleSetArray = async (ARRAY) => {
+    // const data = await axios.get(API + "sendData", {},);
+    // let obj = data.data;
+    setArray([...ARRAY]);
   };
 
-  async function sendData() {
-    const data = await axios.get(API+"sendData", {},  );
-    return data.data;
-  }
-
+  // gets the amount of money in the main wallet and sets it to the state
   async function getAmount() {
-    const data = await axios.get(API+"getAmount", {},  );
+    const data = await axios.get(API + "getAmount", {},);
     setCash(data.data.balance);
   }
 
+  // cash out function
+  async function cashOutFunc() {
+    const data = await axios.get(API + "cashOut", {},);
+    setCash(data.data.currentBalance);
+    return data.data;
+  }
+
+  // add money to main wallet
   async function uploadAmount(AMOUNT) {
-    const data = await axios.post(API+"updateUser", {
+    const data = await axios.post(API + "updateUser", {
       money: AMOUNT,
     });
     return data.data;
   }
 
-  async function uploadData(AMOUNT, BET) {
-    const data = await axios.post(API+"updateBooks", {
-      amount: AMOUNT,
-      bet: BET,
-    },  );
-    return data.data;
-  }
+  // upload game data after game over (maintaining books)
+  // async function uploadData(AMOUNT, BET) {
+  //   const data = await axios.post(API + "updateBooks", {
+  //     amount: AMOUNT,
+  //     bet: BET,
+  //   },);
+  //   return data.data;
+  // }
 
+  // play game with no. of mines
   async function requests() {
-    const ready = await axios.get(API+"play", {
+    const ready = await axios.get(API + "play", {
       params: {
         mines: mines,
+        bet: money,
       },
     });
     setClickedIndices([]);
@@ -80,6 +94,13 @@ function App() {
   }
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const isAuth = await checkAuthStatus(API);
+      if (isAuth.isAuthenticated) {
+        setIsAuthenticated(true);
+      }
+    }
+    checkAuth();
     getAmount();
   }, []);
 
@@ -104,13 +125,12 @@ function App() {
         setMultiply,
         clickedIndices,
         setClickedIndices,
-        bet,
-        setBet,
         isAuthenticated, setIsAuthenticated,
         API,
         handleSetArray,
         uploadAmount,
-        uploadData,
+        cashOutFunc,
+        getAmount,
 
         requests,
 
@@ -122,10 +142,14 @@ function App() {
         alertBoxMsg, setAlertBoxMsg,
         alertBoxTitle, setAlertBoxTitle,
         alertBoxSeverity, setAlertBoxSeverity,
+
+        highestWin, setHighestWin,
       }}
     >
       <BrowserRouter>
-          <Navbar />
+        <AutohideSnackbar />
+        <AlertDialogSlide />
+        <Navbar />
         <Routes>
           <Route path="/" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />

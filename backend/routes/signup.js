@@ -1,37 +1,38 @@
 const { Router } = require("express");
-const {user} = require('../db');
-const {schema} = require('../test');
+const { user } = require('../config/db');
+const { schema } = require('../zodType/test');
 const router = Router();
 
-router.post("/signup", async function(req,res){
-    const data =req.body;
-  
-    const parsedData = schema.safeParse(data);
-    if(!parsedData.success){
-      res.send({msg: parsedData.error});
-      return;
-    }
-  
-    const users = await user.findOne({
-      phoneNumber: data.phoneNumber
-    });
-    if(users){
-      res.send({msg:"enter a new phone number"});
-      return;
-    }
-    else{
-      await user.create({
-        name:data.name,
-        phoneNumber:data.phoneNumber,
-        password: data.password,
-        email:data.email,
-        money:100
-      });
-      res.send({
-        msg:"user created"
-      });
+router.post("/signup", async function (req, res) {
+  const data = req.body;
+
+  const parsedData = schema.safeParse(data);
+  if (!parsedData.success) {
+    res.send({ success: false, error: parsedData.error });
+    return;
   }
-  
+
+  const users = await user.findOne({
+    phoneNumber: data.phoneNumber
   });
+  if (users) {
+    res.send({ success: false, msg: "enter a new phone number" });
+    return;
+  }
+  else {
+    await user.create({
+      name: data.name,
+      phoneNumber: data.phoneNumber,
+      password: data.password,
+      email: data.email,
+      money: 10000
+    });
+    res.send({
+      success: true,
+      msg: "user created"
+    });
+  }
+
+});
 
 module.exports = router;
