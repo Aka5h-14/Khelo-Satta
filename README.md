@@ -61,6 +61,7 @@ KHELO_SATTA is a feature-rich gaming platform that combines exciting gameplay me
 - **[Node.js](https://nodejs.org/)** - JavaScript Runtime
 - **[Express](https://expressjs.com/)** - Web Application Framework
 - **[MongoDB](https://www.mongodb.com/)** - NoSQL Database
+- **[Redis](https://redis.io/)** - In-Memory Data Store for Session Caching
 - **[Express Sessions](https://www.npmjs.com/package/express-session)** - Session Middleware
 
 ### Deployment
@@ -101,6 +102,7 @@ KHELO_SATTA is a feature-rich gaming platform that combines exciting gameplay me
    PORT=your_port
    MONGO_URL=your_mongodb_url
    SESSIONS_SEC=your_session_secret
+   REDIS_URL=your_redis_url
    ```
 
 5. **Start development servers**
@@ -129,18 +131,52 @@ Khelo-Satta/
 
 ## 📚 API Documentation
 
+### Health Check
+- `GET /api/health` - Check service health status (MongoDB, Redis, Session Store)
+
 ### Authentication Endpoints
 - `POST /signup` - Register new user
+  - Body: `{ name, phoneNumber, password, email }`
+  - Response: Initial balance of 10,000 on successful registration
 - `POST /signin` - Authenticate user
+  - Body: `{ phoneNumber, password }`
+  - Response: Session token and current balance
 - `POST /signOut` - End user session
+- `GET /checkAuth` - Verify authentication status
 
-### Game Endpoints
-- `GET /getAmount` - Retrieve user balance
-- `GET /play` - Initialize game session
+### Game Management
+- `GET /getAmount` - Retrieve user's current balance
+- `GET /play` - Initialize new game session
+  - Query params: `mines` (1-24), `bet` (amount)
 - `GET /minesClick` - Process game moves
-- `GET /sendData` - Submit game results
-- `GET /updateBooks` - Record game history
-- `GET /updateUser` - Update user statistics
+  - Query params: `index` (0-24)
+  - Response: Block status, multiplier, win status
+- `GET /gameState` - Get current game state
+  - Response: Multiplier, clicked indices, bet amount
+- `GET /cashOut` - Cash out current game
+  - Response: Win amount, updated balance
+- `GET /sendData` - Reset game state and return mine positions
+
+### Transaction Management
+- `POST /updateBooks` - Record game transactions
+  - Body: `{ amount, bet }`
+- `POST /updateUser` - Update user balance
+  - Body: `{ money }`
+
+### Session Management
+The application uses a hybrid session management system:
+- Redis for fast session data access
+- MongoDB for persistent session storage
+- Automatic session synchronization between Redis and MongoDB
+- Session TTL: 1 hour
+- Secure session cookies with HTTPS only
+
+### Security Features
+- Password hashing using bcrypt
+- HTTPS-only cookie transmission
+- Session-based authentication
+- Rate limiting on sensitive endpoints
+- Secure headers and CORS configuration
 
 ## 🌐 Deployment
 
@@ -176,7 +212,3 @@ Project Link: [https://github.com/Aka5h-14/Khelo-Satta](https://github.com/Aka5h
 <div align="center">
 Made with ❤️ by Akash
 </div>
-
-
-
-
