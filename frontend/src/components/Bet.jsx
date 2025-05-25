@@ -1,7 +1,6 @@
 import context from "./MyContext";
-import { useCallback, useContext, useState, useRef } from "react";
-import OutlinedAlerts from "./AlertGreen";
-import { paisaToRupees, rupeesToPaisa, formatRupees, validateAndConvertAmount } from "../utils/money";
+import { useCallback, useContext, useRef } from "react";
+import { rupeesToPaisa, formatRupees, validateAndConvertAmount } from "../utils/money";
 
 export default function Bet() {
     const { 

@@ -18,7 +18,7 @@ function Mine(props) {
     setMultiply,
     clickedIndices,
     setClickedIndices,
-    API, getAmount,
+    API,
     handleSetArray, setOpen,
     setAlertMsg,
     setAlertSeverity,setOpenBox,
@@ -104,7 +104,6 @@ function Mine(props) {
             
             handleSetArray(box.array);
             setgameOver(true);
-            getAmount();
             // setCash(prev => prev + winAmountPaisa);
             setProfit(prev => prev + (box.winAmount - money));
             // setProfit(prev => prev + (winAmountPaisa - money));

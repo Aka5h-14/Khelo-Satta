@@ -2,7 +2,18 @@ const Redis = require('redis');
 
 // Initialize Redis client
 const redisClient = Redis.createClient({
-    url: process.env.REDIS_URL
+    url: process.env.REDIS_URL,
+    socket: {
+        connectTimeout: 10000,
+        reconnectStrategy: (retries) => {
+            if (retries > 10) {
+                console.log('Redis max retries reached, giving up');
+                return new Error('Redis max retries reached');
+            }
+            // Reconnect after retries * 1000 ms
+            return Math.min(retries * 1000, 10000);
+        }
+    }
 });
 
 redisClient.connect().catch(console.error);

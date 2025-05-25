@@ -73,6 +73,7 @@ export default function AlertDialogSlide() {
           padding: '1.5rem',
         }}>
           <DialogContentText 
+            component="div"
             id="alert-dialog-slide-description"
             sx={{
               color: '#E5E7EB',

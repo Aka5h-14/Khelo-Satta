@@ -1,7 +1,6 @@
 import Mine from "./Mine";
 import context from './MyContext';
-import { useContext , useEffect , useState } from "react";
-import OutlinedAlerts from "./AlertGreen";
+import { useContext , useEffect } from "react";
 
 function Mines() {
 

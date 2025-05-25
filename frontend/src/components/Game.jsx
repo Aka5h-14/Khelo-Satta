@@ -9,6 +9,7 @@ export default function Game() {
     cash,
     profit,
     highestWin,
+    getAmount,
     setOpenBox,
     setAlertBoxTitle,
     setAlertBoxMsg,
@@ -33,18 +34,11 @@ export default function Game() {
       </div>
     `);
     setAlertBoxSeverity('info');
+    setOpenBox(true);
 
-    // Small delay to ensure the alert box is properly initialized
-    const timer = setTimeout(() => {
-      setOpenBox(true);
-    }, 100);
+    getAmount();
 
-    // Cleanup function
-    return () => {
-      clearTimeout(timer);
-      setOpenBox(false);
-    };
-  }, [setAlertBoxTitle, setAlertBoxMsg, setAlertBoxSeverity, setOpenBox]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-2 xs:p-3 sm:p-4 md:p-5 lg:p-6">
