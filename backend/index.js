@@ -118,7 +118,7 @@ const checkConnections = (req, res, next) => {
 // CORS configuration based on environment
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
-      'https://your-production-frontend-url.com',  // Change this to your actual frontend domain
+        // actual frontend domain
       'https://khelo-satta-8hkv.vercel.app', 
       'https://khelo.100xdev.me'
     ]
@@ -148,7 +148,7 @@ app.use(session({
     sameSite: 'none',
     maxAge: 60000 * 60,
     domain: process.env.NODE_ENV === 'production' 
-      ? '.your-domain.com'  // Change this to your actual domain
+      ? 'khelo.100xdev.me'  // Updated to match your actual domain
       : undefined
   },
   store: store,
