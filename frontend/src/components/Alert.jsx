@@ -31,13 +31,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function AlertDialogSlide() {
-  const { 
+  const {
     openBox, setOpenBox,
     alertBoxMsg,
     alertBoxTitle,
   } = useContext(context);
 
-  // const [open, setOpen] = React.useState(true);
 
   const handleClose = () => {
     setOpenBox(false);
@@ -60,7 +59,7 @@ export default function AlertDialogSlide() {
           },
         }}
       >
-        <DialogTitle sx={{ 
+        <DialogTitle sx={{
           color: '#E5E7EB',
           fontSize: '1.25rem',
           fontWeight: '600',
@@ -68,11 +67,11 @@ export default function AlertDialogSlide() {
         }}>
           {alertBoxTitle}
         </DialogTitle>
-        <DialogContent sx={{ 
+        <DialogContent sx={{
           minWidth: 300,
           padding: '1.5rem',
         }}>
-          <DialogContentText 
+          <DialogContentText
             component="div"
             id="alert-dialog-slide-description"
             sx={{
@@ -87,23 +86,13 @@ export default function AlertDialogSlide() {
           >
             <div dangerouslySetInnerHTML={{ __html: alertBoxMsg }} />
 
-            
-            {/* How to play<br/>1 Enter the bet amount<br/>2 Click the add bet button<br/>3 Enter the number of mines<br/>4 Click the play button<br/>5 Play the game by clicking on the tiles<br/> <br/>You can cashout the amount using the Cash Out button */}
-
-            {/* <p>1 Enter the bet amount</p>
-            <p>2 Click the add bet button</p>
-            <p>3 Enter the number of mines</p>
-            <p>4 Click the play button</p>
-            <p>5 Play the game by clicking on the tiles</p>
-            <p>You can cashout the amount using the Cash Out button</p> */}
-
           </DialogContentText>
         </DialogContent>
         <DialogActions sx={{
           borderTop: '1px solid rgba(59, 130, 246, 0.2)',
           padding: '0.75rem',
         }}>
-          <Button 
+          <Button
             onClick={handleClose}
             sx={{
               color: '#3B82F6',

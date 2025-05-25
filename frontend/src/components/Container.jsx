@@ -7,12 +7,12 @@ import Bet from "./Bet";
 function Container() {
   const {
     setArray,
-    cash, setCash,
     money, setMoney,
     setProfit,
-    play, setPlay,
+    setGamesPlayed,
     gameOver, setgameOver,
     multiply, setMultiply,
+    setPlay,
     setClickedIndices,
     handleSetArray, cashOutFunc,
     setOpen, setAlertMsg, setAlertSeverity,
@@ -32,7 +32,8 @@ function Container() {
       setMultiply(1);
       setClickedIndices([]);
     }
-    setPlay(play + 1);
+    setGamesPlayed(prev => prev + 1);
+    setPlay(prev => prev + 1);
   }
 
   async function cashOut() {
@@ -43,11 +44,6 @@ function Container() {
       const winAmountPaisa = data.winAmount;
       setHighestWin(prev => Math.max(prev, winAmountPaisa));
       handleSetArray(data.array);
-
-      // await Promise.all([
-      //   uploadAmount(cash + winAmountPaisa),
-      //   uploadData(winAmountPaisa, money),
-      // ]);
 
       setAlertBoxTitle('Cash Out Success!');
       setAlertBoxMsg(`

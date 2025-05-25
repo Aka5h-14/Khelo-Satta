@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 axios.defaults.withCredentials = true;
@@ -10,7 +10,7 @@ import Signup from "./components/Signup";
 import Game from "./components/Game";
 import AutohideSnackbar from "./components/SnackBar";
 import AlertDialogSlide from "./components/Alert";
-import { checkAuthStatus } from "./utils/auth";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [array, setArray] = useState(new Array(25).fill(-1));
@@ -23,6 +23,7 @@ function App() {
   const [highestWin, setHighestWin] = useState(0); // highest win amount
   const [mines, setMines] = useState(1);  // no of mines
   const [play, setPlay] = useState(0); // count of games played
+  const [gamesPlayed, setGamesPlayed] = useState(0); // count of games played for new game start
   const [clickedIndices, setClickedIndices] = useState([]);  // array of clicked indices
   const [gameOver, setgameOver] = useState(true);  // true means game is over
   const [isAuthenticated, setIsAuthenticated] = useState(false); // true means user is authenticated
@@ -95,15 +96,45 @@ function App() {
     return ready.data.msg;
   }
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const isAuth = await checkAuthStatus(API);
-      if (isAuth.isAuthenticated) {
-        setIsAuthenticated(true);
-      }
+  // useEffect(() => {
+  // const checkAuth = async () => {
+  //   const isAuth = await checkAuthStatus(API);
+  //   if (isAuth.isAuthenticated) {
+  //     setIsAuthenticated(true);
+  //   }
+  // }
+  // checkAuth();
+  // }, []);
+
+  // Add this new function
+  async function getGameState() {
+    try {
+      const response = await axios.get(API + "gameState", {});
+      const data = response.data;
+
+      if (data.success) {
+        const gameState = data.gameState;
+        setMultiply(gameState.multiplier);
+        setClickedIndices(gameState.clickedIndices);
+        let array = new Array(25).fill(-1);
+        gameState.clickedIndices.map((index) => {
+          array[index] = 1;
+        });
+        handleSetArray(array);
+        setMoney(gameState.bet);
+        setgameOver(gameState.gameOver);
+        setPlay(1);
+      }else{
+        return;
+      } 
+      
+    } catch (error) {
+      console.error('Error fetching game state:', error);
+      setAlertMsg("Error fetching game state");
+      setAlertSeverity("error");
+      setOpen(true);
     }
-    checkAuth();
-  }, []);
+  }
 
   return (
     <context.Provider
@@ -127,13 +158,15 @@ function App() {
         clickedIndices,
         setClickedIndices,
         isAuthenticated, setIsAuthenticated,
+        highestWin, setHighestWin,
         API,
         handleSetArray,
         uploadAmount,
         cashOutFunc,
         getAmount,
-
         requests,
+        getGameState,
+        gamesPlayed, setGamesPlayed,
 
         open, setOpen,
         alertMsg, setAlertMsg,
@@ -144,7 +177,6 @@ function App() {
         alertBoxTitle, setAlertBoxTitle,
         alertBoxSeverity, setAlertBoxSeverity,
 
-        highestWin, setHighestWin,
       }}
     >
       <BrowserRouter>
@@ -154,7 +186,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/mines" element={<Game />} />
+          <Route
+            path="/mines"
+            element={
+              <ProtectedRoute>
+                <Game />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </context.Provider>

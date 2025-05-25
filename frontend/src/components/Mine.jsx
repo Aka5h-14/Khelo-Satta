@@ -80,12 +80,7 @@ function Mine(props) {
 
           // Handle max win
           if (box.maxWin) {
-            // const winAmountPaisa = Math.floor(money * box.multiplier);
-            
-            // await Promise.all([
-            //   uploadData(winAmountPaisa, money),
-            //   uploadAmount(cash + winAmountPaisa)
-            // ]);
+
             setHighestWin(prev => Math.max(prev, box.winAmount));
             
             // Update alert box for max win
@@ -104,9 +99,7 @@ function Mine(props) {
             
             handleSetArray(box.array);
             setgameOver(true);
-            // setCash(prev => prev + winAmountPaisa);
             setProfit(prev => prev + (box.winAmount - money));
-            // setProfit(prev => prev + (winAmountPaisa - money));
             setMultiply(1);
             setMoney(0);
             
@@ -133,13 +126,7 @@ function Mine(props) {
             setAlertBoxSeverity('error');
             setOpenBox(true);
             
-            // await Promise.all([
-            //   uploadData(-money, money),
-            //   uploadAmount(cash)
-            // ]);
-            
             setProfit(prev => prev - money)
-            // setProfit(prev => prev - money);
             setMultiply(1);
             setMoney(0);
             

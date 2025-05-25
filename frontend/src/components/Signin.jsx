@@ -1,16 +1,13 @@
-import { useRef, useContext, useState, useEffect } from "react";
+import { useRef, useContext, useEffect } from "react";
 import context from "./MyContext";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../assets/logo.png'
 import { checkAuthStatus } from "../utils/auth";
-import { paisaToRupees } from "../utils/money";
 
 export default function Signin() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { setCash, setgameOver, setIsAuthenticated, API, setOpen, setAlertMsg, setAlertSeverity } = useContext(context);
+  const { setCash, setIsAuthenticated, API, setOpen, setAlertMsg, setAlertSeverity } = useContext(context);
 
   const phoneNumberInputRef = useRef();
   const passwordInputRef = useRef();
@@ -27,20 +24,30 @@ export default function Signin() {
         }
       } catch (error) {
         console.error('Auth verification error:', error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     verifyAuth();
   }, []);
 
-  async function handleLoginForm() {
+  async function handleLoginForm(e) {
+    if (e) e.preventDefault();
+    
     const phoneNumber = phoneNumberInputRef.current.value.trim();
     const password = passwordInputRef.current.value;
 
-    if (!phoneNumber || !password) {
-      setAlertMsg("Please fill in all fields");
+    // Phone number validation (10 digits)
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(phoneNumber)) {
+      setAlertMsg("Please enter a valid 10-digit phone number");
+      setAlertSeverity("error");
+      setOpen(true);
+      return;
+    }
+
+    // Password validation (minimum 6 characters)
+    if (password.length < 6) {
+      setAlertMsg("Password must be at least 6 characters long");
       setAlertSeverity("error");
       setOpen(true);
       return;
@@ -60,7 +67,7 @@ export default function Signin() {
         setOpen(true);
         navigate("/mines");
       } else {
-        setAlertMsg("Invalid credentials");
+        setAlertMsg(send.data.msg || "Invalid credentials");
         setAlertSeverity("error");
         setOpen(true);
       }
@@ -70,14 +77,6 @@ export default function Signin() {
       setAlertSeverity("error");
       setOpen(true);
     }
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-        <div className="text-white">Loading...</div>
-      </div>
-    );
   }
 
   return (
@@ -97,40 +96,44 @@ export default function Signin() {
           </p>
         </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form onSubmit={handleLoginForm} className="space-y-6">
             <div>
-              <label htmlFor="tel2" className="block text-sm font-medium leading-6 text-gray-300">
+              <label htmlFor="phoneNumber" className="block text-sm font-medium leading-6 text-gray-200">
                 Phone Number
               </label>
               <div className="mt-2">
                 <input
-                  id="tel2"
+                  ref={phoneNumberInputRef}
+                  id="phoneNumber"
                   name="phoneNumber"
                   type="tel"
-                  ref={phoneNumberInputRef}
-                  required
                   autoComplete="tel"
-                  className="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 bg-gray-50/95 backdrop-blur-sm transition-all duration-200"
-                  placeholder="Enter your phone number"
+                  required
+                  pattern="[0-9]{10}"
+                  placeholder="Enter your 10-digit phone number"
+                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
 
             <div>
-              <label htmlFor="pass2" className="block text-sm font-medium leading-6 text-gray-300">
-                Password
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-200">
+                  Password
+                </label>
+              </div>
               <div className="mt-2">
                 <input
-                  id="pass2"
+                  ref={passwordInputRef}
+                  id="password"
                   name="password"
                   type="password"
-                  ref={passwordInputRef}
-                  required
                   autoComplete="current-password"
-                  className="block w-full rounded-lg border-0 py-2 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 bg-gray-50/95 backdrop-blur-sm transition-all duration-200"
-                  placeholder="Enter your password"
+                  required
+                  minLength={6}
+                  placeholder="Enter your password (min. 6 characters)"
+                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -138,25 +141,22 @@ export default function Signin() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-lg bg-gradient-to-r from-indigo-600 to-indigo-500 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-lg hover:from-indigo-500 hover:to-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all duration-200 hover:shadow-xl"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLoginForm();
-                }}
+                className="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
               >
                 Sign in
               </button>
             </div>
           </form>
-          <p className="mt-8 text-center text-sm text-gray-400">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors duration-200">
-              Create one now
+
+          <p className="mt-10 text-center text-sm text-gray-400">
+            Not a member?{' '}
+            <Link to="/signup" className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
+              Sign up now
             </Link>
           </p>
         </div>
       </div>
     </>
-  )
+  );
 }
   

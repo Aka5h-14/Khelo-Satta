@@ -1,16 +1,17 @@
 import bcrypt from "bcryptjs"
-import { useRef, useContext } from "react";
+import { useRef, useContext, useEffect } from "react";
 import axios from "axios";
 axios.defaults.withCredentials = true;
 import { useNavigate, Link } from "react-router-dom";
 import context from "./MyContext";
 import logo from '../assets/logo.png'
+import { checkAuthStatus } from "../utils/auth";
 
 const numSaltRounds = 8;
 
 export default function Signup() {
 
-  const { API, setOpen,
+  const { API, setIsAuthenticated, setOpen,
     setAlertMsg,
     setAlertSeverity, } = useContext(context);
 
@@ -21,7 +22,25 @@ export default function Signup() {
   const passwordInputRef = useRef();
   const emailInputRef = useRef();
 
-  async function handleLoginForm() {
+  useEffect(() => {
+    const verifyAuth = async () => {
+      try {
+        const isAuth = await checkAuthStatus(API);
+        if (isAuth.isAuthenticated) {
+          setIsAuthenticated(true);
+          navigate('/mines');
+        }
+      } catch (error) {
+        console.error('Auth verification error:', error);
+      } finally {
+        
+      }
+    };
+
+    verifyAuth();
+  }, []);
+
+  async function handleSignupForm() {
     const name = nameInputRef.current.value.trim();
     const phoneNumber = phoneNumberInputRef.current.value.trim();
     const password = passwordInputRef.current.value;
@@ -135,7 +154,7 @@ export default function Signup() {
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-5" onSubmit={(e) => {
             e.preventDefault();
-            handleLoginForm();
+            handleSignupForm();
           }}>
             <div>
               <div className="flex items-center justify-between">

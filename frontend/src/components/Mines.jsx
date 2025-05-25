@@ -8,10 +8,11 @@ function Mines() {
     cash,
     setCash,
     money,
-    play,
     requests, setOpen,
     setAlertMsg,
-    setAlertSeverity,  } = useContext(context);
+    setAlertSeverity, 
+    gamesPlayed,
+  } = useContext(context);
   
 
     useEffect(() => {
@@ -38,7 +39,7 @@ function Mines() {
       };
   
       fetchData();
-    }, [play]);
+    }, [gamesPlayed]);
 
 
   return (

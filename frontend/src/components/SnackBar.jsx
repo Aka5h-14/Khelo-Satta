@@ -5,7 +5,6 @@ import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
 
 export default function AutohideSnackbar() {
-  // const [open, setOpen] = React.useState(false);
 
   const {open, setOpen , alertMsg, alertSeverity} = useContext(context);
 

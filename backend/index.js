@@ -169,6 +169,7 @@ const getAmount = require("./routes/getAmount");
 const minesClick = require("./routes/minesClick");
 const play = require("./routes/play");
 // const sendData = require("./routes/sendData"); // disabled
+const gameState = require("./routes/gameState");
 const signin = require("./routes/signin");
 const signOut = require("./routes/signOut");
 const signup = require("./routes/signup");
@@ -183,6 +184,7 @@ app.use("/api/", getAmount);
 app.use("/api/", minesClick);
 app.use("/api/", play);
 // app.use("/api/", sendData); // disabled
+app.use("/api/", gameState);
 app.use("/api/", signin);
 app.use("/api/", signOut);
 app.use("/api/", signup);

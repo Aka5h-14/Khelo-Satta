@@ -26,7 +26,7 @@ function classNames(...classes) {
 
 export default function Navbar() {
 
-  const { setIsAuthenticated, setCash, setMoney, setProfit, setPlay, setMines, setgameOver, setClickedIndices, isAuthenticated, API } = useContext(context);
+  const { setIsAuthenticated, setCash, setMoney, setProfit, setPlay, setgameOver, setClickedIndices, isAuthenticated, API, handleSetArray, setMultiply } = useContext(context);
 
   const navigate = useNavigate();
 
@@ -45,6 +45,8 @@ export default function Navbar() {
         });
 
         setIsAuthenticated(false);
+        handleSetArray(new Array(25).fill(-1));
+        setMultiply(1);
         setCash(0);
         setMoney(0);
         setProfit(0);

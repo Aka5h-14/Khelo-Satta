@@ -10,6 +10,7 @@ export default function Game() {
     profit,
     highestWin,
     getAmount,
+    getGameState,
     setOpenBox,
     setAlertBoxTitle,
     setAlertBoxMsg,
@@ -17,27 +18,34 @@ export default function Game() {
   } = useContext(context);
 
   useEffect(() => {
-    // Show instructions dialog
-    setAlertBoxTitle('How to Play Mines');
-    setAlertBoxMsg(`
-      <div class="space-y-4">
-        <p class="font-medium text-lg text-indigo-400">Welcome to Mines!</p>
-        <ol class="list-decimal list-inside space-y-2 text-gray-300">
-          <li>Enter your bet amount</li>
-          <li>Choose the number of mines (1-24)</li>
-          <li>Click "Play Game" to start</li>
-          <li>Click on tiles to reveal diamonds</li>
-          <li>Use "Cash Out" to secure your winnings</li>
-          <li>Avoid mines or lose your bet!</li>
-        </ol>
-        <p class="text-sm text-gray-400 mt-4">Good luck and play responsibly!</p>
-      </div>
-    `);
-    setAlertBoxSeverity('info');
-    setOpenBox(true);
+    const initializeGame = async () => {
+      // Fetch wallet balance
+      await getAmount();
+      
+      // Fetch and restore game state if available
+      await getGameState();
 
-    getAmount();
+      // Show instructions dialog
+      setAlertBoxTitle('How to Play Mines');
+      setAlertBoxMsg(`
+        <div class="space-y-4">
+          <p class="font-medium text-lg text-indigo-400">Welcome to Mines!</p>
+          <ol class="list-decimal list-inside space-y-2 text-gray-300">
+            <li>Enter your bet amount</li>
+            <li>Choose the number of mines (1-24)</li>
+            <li>Click "Play Game" to start</li>
+            <li>Click on tiles to reveal diamonds</li>
+            <li>Use "Cash Out" to secure your winnings</li>
+            <li>Avoid mines or lose your bet!</li>
+          </ol>
+          <p class="text-sm text-gray-400 mt-4">Good luck and play responsibly!</p>
+        </div>
+      `);
+      setAlertBoxSeverity('info');
+      setOpenBox(true);
+    };
 
+    initializeGame();
   }, []);
 
   return (
@@ -70,11 +78,9 @@ export default function Game() {
         </div>
 
         {/* Game Container */}
-        
-          <div className="card bg-opacity-90 backdrop-blur p-1 xs:p-2 sm:p-3">
-            <Container />
-          </div>
-        
+        <div className="card bg-opacity-90 backdrop-blur p-1 xs:p-2 sm:p-3">
+          <Container />
+        </div>
 
         {/* Profit Chart */}
         <div className="card bg-opacity-90 backdrop-blur p-2 xs:p-3 sm:p-4">
