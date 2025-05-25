@@ -160,7 +160,7 @@ Khelo-Satta/
 ### Transaction Management
 - `POST /updateBooks` - Record game transactions
   - Body: `{ amount, bet }`
-- `POST /updateUser` - Update user balance
+- `PUT /updateUser` - Update user balance
   - Body: `{ money }`
 
 ### Session Management
@@ -175,7 +175,10 @@ The application uses a hybrid session management system:
 - Password hashing using bcrypt
 - HTTPS-only cookie transmission
 - Session-based authentication
-- Rate limiting on sensitive endpoints
+- Rate limiting protection:
+  - Global: 100 requests per 2 minutes per IP
+  - Auth routes: 20 requests per hour per IP
+  - Game actions: 40 requests per minute per IP
 - Secure headers and CORS configuration
 
 ## 🌐 Deployment

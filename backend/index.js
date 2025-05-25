@@ -9,6 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const { redisClient } = require('./config/redis-cache');
 const CachedSessionStore = require('./store/cached-session-store')(session);
+const { globalLimiter, authLimiter, gameLimiter } = require('./middleware/rateLimiter');
 
 const app = express();
 
@@ -20,6 +21,16 @@ let sessionStoreReady = false;
 if (process.env.NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
+
+// Apply global rate limiter to all routes
+app.use(globalLimiter);
+
+// Apply specific rate limiters to routes
+app.use('/api/signin', authLimiter);
+app.use('/api/signup', authLimiter);
+app.use('/api/play', gameLimiter);
+app.use('/api/minesClick', gameLimiter);
+app.use('/api/cashOut', gameLimiter);
 
 // MongoDB connection options
 const mongoOptions = {

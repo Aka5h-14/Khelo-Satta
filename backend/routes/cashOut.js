@@ -64,7 +64,7 @@ router.get("/cashOut", authentification, async function(req, res) {
             });
         });
 
-        res.json({
+        res.status(200).json({
             success: true,
             winAmount: winAmount,
             currentBalance: updatedUser.money,

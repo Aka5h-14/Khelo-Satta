@@ -15,7 +15,9 @@ router.get("/getAmount",authentification, async function(req,res){
       
     }
     else{
-      res.send("wrong user");
+      res.status(404).send({
+        error: "User not found"
+      });
       return;
     }
   

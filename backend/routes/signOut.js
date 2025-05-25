@@ -10,11 +10,11 @@ router.post('/signOut', (req, res) => {
         } else {
           // Optional: Clear the cookie
           res.clearCookie('connect.sid'); 
-          return res.json({ message: 'Logged out successfully.' });
+          return res.status(200).json({ message: 'Logged out successfully.' });
         }
       });
     } else {
-      return res.json({ message: 'No active session found.' });
+      return res.status(200).json({ message: 'No active session found.' });
     }
   });
 

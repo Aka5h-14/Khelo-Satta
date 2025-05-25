@@ -10,7 +10,7 @@ router.post("/signin", async function(req,res){
   
     const parsedData = schema2.safeParse(data);
     if(!parsedData.success){
-      res.send({msg:parsedData.error});
+      res.status(400).send({msg:parsedData.error});
       return;
     }
   
@@ -18,7 +18,7 @@ router.post("/signin", async function(req,res){
       phoneNumber: data.phoneNumber
     });
     if(!users){
-      res.send({msg:"wrong phone number"})
+      res.status(404).send({msg:"wrong phone number"})
       return;
     }
     if(bcrypt.compareSync(data.password, users.password)){
@@ -33,7 +33,7 @@ router.post("/signin", async function(req,res){
       })
     }
     else{
-      res.send({msg:"wrong user input"});
+      res.status(401).send({msg:"wrong user input"});
     }
   
   });

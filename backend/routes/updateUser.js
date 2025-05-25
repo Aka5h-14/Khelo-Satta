@@ -3,7 +3,7 @@ const { authentification } = require("../middleware/authen");
 const {user} = require('../config/db');
 const router = Router();
 
-router.post("/updateUser", authentification ,async function (req,res){
+router.put("/updateUser", authentification ,async function (req,res){
     const data = req.body;
     let id = req.session.UserId;
     try {
@@ -14,7 +14,7 @@ router.post("/updateUser", authentification ,async function (req,res){
       );
       
       if(found){
-        res.json({ success: true, balance: found.money });
+        res.status(200).json({ success: true, balance: found.money });
       } else {
         res.status(404).json({ success: false, message: "User not found" });
       }

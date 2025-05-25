@@ -8,7 +8,7 @@ router.post("/signup", async function (req, res) {
 
   const parsedData = schema.safeParse(data);
   if (!parsedData.success) {
-    res.send({ success: false, error: parsedData.error });
+    res.status(400).send({ success: false, error: parsedData.error });
     return;
   }
 
@@ -16,7 +16,7 @@ router.post("/signup", async function (req, res) {
     phoneNumber: data.phoneNumber
   });
   if (users) {
-    res.send({ success: false, msg: "enter a new phone number" });
+    res.status(409).send({ success: false, msg: "enter a new phone number" });
     return;
   }
   else {
@@ -27,7 +27,7 @@ router.post("/signup", async function (req, res) {
       email: data.email,
       money: 10000
     });
-    res.send({
+    res.status(201).send({
       success: true,
       msg: "user created"
     });

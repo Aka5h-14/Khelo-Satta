@@ -10,13 +10,13 @@ router.get("/checkAuth", async (req, res) => {
             // Get user's current balance
             const currentUser = await user.findById(req.session.UserId);
             if (currentUser) {
-                return res.json({
+                return res.status(200).json({
                     isAuthenticated: true
                 });
             }
         }
         
-        return res.json({
+        return res.status(401).json({
             isAuthenticated: false
         });
     } catch (error) {

@@ -7,7 +7,7 @@ router.get("/play",authentification, function(req,res){
     const bet = req.query.bet;
   
     if(mines<1 || mines>24 || mines==null || mines==undefined){
-      res.send({msg :"Wrong input of mines"});
+      res.status(400).send({msg :"Wrong input of mines"});
       return;
     }
   
@@ -58,7 +58,7 @@ router.get("/play",authentification, function(req,res){
         console.error('Error saving session:', err);
         return res.status(500).json({ msg: "Error initializing game" });
       }
-      res.send({ msg: "Game ready to play" });
+      res.status(200).send({ msg: "Game ready to play" });
     });
 })
 

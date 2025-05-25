@@ -68,7 +68,7 @@ function App() {
 
   // add money to main wallet
   async function uploadAmount(AMOUNT) {
-    const data = await axios.post(API + "updateUser", {
+    const data = await axios.put(API + "updateUser", {
       money: AMOUNT,
     });
     return data.data;

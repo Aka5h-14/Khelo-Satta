@@ -78,7 +78,7 @@ router.get("/minesClick", authentification, async function (req, res) {
             });
           });
 
-          res.json({
+          res.status(200).json({
             success: true,
             block: data,
             multiplier: multiply[clicked.length - 1],
@@ -99,7 +99,7 @@ router.get("/minesClick", authentification, async function (req, res) {
             });
           });
 
-          res.json({
+          res.status(200).json({
             success: true,
             block: data,
             multiplier: multiply[clicked.length - 1],
@@ -149,7 +149,7 @@ router.get("/minesClick", authentification, async function (req, res) {
           });
         });
 
-        res.json({
+        res.status(200).json({
           success: true,
           block: data,
           multiplier: 0,
