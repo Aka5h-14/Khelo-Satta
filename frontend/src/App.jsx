@@ -39,7 +39,8 @@ function App() {
   const [alertBoxSeverity, setAlertBoxSeverity] = useState("warning");
 
   // const API = "https://khelo-satta.vercel.app/api/";
-  const API = "https://khelo.100xdev.me/api/";
+  // const API = "https://khelo.100xdev.me/api/";
+  const API = "https://khelo-satta-backend.onrender.com/api/";
   // const API = "https://localhost:3000/api/";
 
 
