@@ -20,11 +20,12 @@ router.get("/cashOut", authentification, async function(req, res) {
     try {
         const win = gameState.bet * gameState.multiplier[gameState.clickedIndices.length - 1];
         const winAmount = Math.floor(win);
+        const profit = winAmount - gameState.bet;
 
         // Update user's balance within transaction
         const updatedUser = await user.findOneAndUpdate(
             { _id: req.session.UserId },
-            { $inc: { money: winAmount } },
+            { $inc: { money: profit } },
             { new: true, session }
         );
 

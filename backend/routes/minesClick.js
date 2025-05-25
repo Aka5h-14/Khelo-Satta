@@ -37,11 +37,12 @@ router.get("/minesClick", authentification, async function (req, res) {
           // Win with max multiplier scenario
           const win = req.session.gameState.bet * multiply[clicked.length - 1];
           const winAmount = Math.floor(win);
+          const profit = winAmount - req.session.gameState.bet;
 
           // Update user balance
           const updatedUser = await user.findOneAndUpdate(
             { _id: req.session.UserId },
-            { $inc: { money: winAmount } },
+            { $inc: { money: profit } },
             { new: true, session }
           );
 
