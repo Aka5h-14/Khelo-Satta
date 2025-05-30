@@ -66,7 +66,7 @@ export default function Signin() {
         setAlertMsg("Successfully signed in");
         setAlertSeverity("success");
         setOpen(true);
-        navigate("/mines");
+        navigate("/mines"); 
       } else {
         setAlertMsg(send.data.msg || "Invalid credentials");
         setAlertSeverity("error");
@@ -112,8 +112,9 @@ export default function Signin() {
                   autoComplete="tel"
                   required
                   pattern="[0-9]{10}"
+                  maxLength={10}
                   placeholder="Enter your 10-digit phone number"
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 bg-white py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -134,12 +135,12 @@ export default function Signin() {
                   required
                   minLength={6}
                   placeholder="Enter your password (min. 6 characters)"
-                  className="block w-full rounded-md border-0 bg-white/5 py-1.5 px-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 pr-10"
+                  className="block w-full rounded-md border-0 bg-white py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6 pr-10"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-300 focus:outline-none"
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-gray-900 focus:outline-none"
                 >
                   {showPassword ? (
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
@@ -165,11 +166,14 @@ export default function Signin() {
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-400">
+          <p className="mt-8 text-center text-sm text-gray-400">
             Not a member?{' '}
             <Link to="/signup" className="font-semibold leading-6 text-indigo-400 hover:text-indigo-300">
               Sign up now
             </Link>
+          </p>
+          <p className="mt-3 text-center text-sm text-gray-300">
+            {"GUEST LOGIN -> Phone: 9999999999, Password: 123456"}
           </p>
         </div>
       </div>

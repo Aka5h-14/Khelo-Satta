@@ -87,9 +87,10 @@ export default function Navbar() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <div
                     key={item.name}
-                    href={item.href}
+                    onClick={() => navigate(item.href)}
+                    role="button"
                     aria-current={item.current ? "page" : undefined}
                     className={classNames(
                       item.current
@@ -99,7 +100,7 @@ export default function Navbar() {
                     )}
                   >
                     {item.name}
-                  </a>
+                  </div>
                 ))}
               </div>
             </div>
