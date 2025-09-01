@@ -9,7 +9,6 @@ const fs = require('fs');
 const path = require('path');
 const { redisClient } = require('./config/redis-cache');
 const { globalLimiter, authLimiter, gameLimiter } = require('./middleware/rateLimiter');
-const { checkConnections } = require("./middleware/checkConn");
 
 const CachedSessionStore = require('./store/cached-session-store')(session);
 
@@ -129,15 +128,15 @@ store.on('error', function(error) {
 });
 
 // Connection readiness middleware
-// const checkConnections = (req, res, next) => {
-//   if (!isConnected || !sessionStoreReady || !redisClient.isReady) {
-//     return res.status(503).json({
-//       error: 'Service temporarily unavailable',
-//       message: 'The server is still initializing. Please try again in a few seconds.'
-//     });
-//   }
-//   next();
-// };
+const checkConnections = (req, res, next) => {
+  if (!isConnected || !sessionStoreReady || !redisClient.isReady) {
+    return res.status(503).json({
+      error: 'Service temporarily unavailable',
+      message: 'The server is still initializing. Please try again in a few seconds.'
+    });
+  }
+  next();
+};
 
 app.use('/api', checkConnections);
 
