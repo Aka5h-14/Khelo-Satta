@@ -8,24 +8,33 @@ const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const { redisClient } = require('./config/redis-cache');
-const CachedSessionStore = require('./store/cached-session-store')(session);
 const { globalLimiter, authLimiter, gameLimiter } = require('./middleware/rateLimiter');
+const { checkConnections } = require("./middleware/checkConn");
+
+const CachedSessionStore = require('./store/cached-session-store')(session);
+
+const getAmount = require("./routes/getAmount");
+const minesClick = require("./routes/minesClick");
+const play = require("./routes/play");
+// const sendData = require("./routes/sendData"); // disabled
+const gameState = require("./routes/gameState");
+const signin = require("./routes/signin");
+const signOut = require("./routes/signOut");
+const signup = require("./routes/signup");
+// const updateBooks = require("./routes/updateBooks"); // disabled
+const updateUser = require("./routes/updateUser");
+const checkAuth = require("./routes/checkAuth");
+const cashOut = require("./routes/cashOut");
 
 const app = express();
 
-// Track connection state
-let isConnected = false;
-let sessionStoreReady = false;
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// Enable trust proxy for production (needed for secure cookies behind reverse proxy)
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1);
-}
-
-// Apply global rate limiter to all routes
+// Global rate limiter to all routes
 app.use(globalLimiter);
 
-// Apply specific rate limiters to routes
+// Specific rate limiters to routes
 app.use('/api/signin', authLimiter);
 app.use('/api/signup', authLimiter);
 app.use('/api/play', gameLimiter);
@@ -38,6 +47,10 @@ const mongoOptions = {
   socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
   family: 4 // Use IPv4, skip trying IPv6
 };
+
+// Track connection state
+let isConnected = false;   // mongoDb
+let sessionStoreReady = false;    // session store
 
 // Connection retry logic with better error handling
 async function connectWithRetry() {
@@ -116,20 +129,21 @@ store.on('error', function(error) {
 });
 
 // Connection readiness middleware
-const checkConnections = (req, res, next) => {
-  if (!isConnected || !sessionStoreReady || !redisClient.isReady) {
-    return res.status(503).json({
-      error: 'Service temporarily unavailable',
-      message: 'The server is still initializing. Please try again in a few seconds.'
-    });
-  }
-  next();
-};
+// const checkConnections = (req, res, next) => {
+//   if (!isConnected || !sessionStoreReady || !redisClient.isReady) {
+//     return res.status(503).json({
+//       error: 'Service temporarily unavailable',
+//       message: 'The server is still initializing. Please try again in a few seconds.'
+//     });
+//   }
+//   next();
+// };
+
+app.use('/api', checkConnections);
 
 // CORS configuration based on environment
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
-        // actual frontend domain
       'https://khelo-satta-8hkv.vercel.app', 
       'https://khelo.100xdev.me'
     ]
@@ -141,10 +155,6 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
-app.use(express.json());
-
-app.use(bodyParser.urlencoded({ extended: false }));
 
 // Session configuration
 app.use(session({
@@ -159,7 +169,7 @@ app.use(session({
     sameSite: 'none',
     maxAge: 60000 * 60,
     domain: process.env.NODE_ENV === 'production' 
-      ? 'khelo.100xdev.me'  // Updated to match your actual domain
+      ? 'khelo.100xdev.me'
       : undefined
   },
   store: store,
@@ -173,21 +183,6 @@ app.get('/api/health', (req, res) => {
     redis: redisClient.isReady
   });
 });
-
-app.use('/api', checkConnections);
-
-const getAmount = require("./routes/getAmount");
-const minesClick = require("./routes/minesClick");
-const play = require("./routes/play");
-// const sendData = require("./routes/sendData"); // disabled
-const gameState = require("./routes/gameState");
-const signin = require("./routes/signin");
-const signOut = require("./routes/signOut");
-const signup = require("./routes/signup");
-// const updateBooks = require("./routes/updateBooks"); // disabled
-const updateUser = require("./routes/updateUser");
-const checkAuth = require("./routes/checkAuth");
-const cashOut = require("./routes/cashOut");
 
 app.get("/api/", (req, res) => res.send("Khelo-Satta Express Backend"));
 

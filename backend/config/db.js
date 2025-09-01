@@ -36,8 +36,7 @@ const accountSchema = new mongoose.Schema({
     time: String,
     createdAt: {
         type: Date,
-        default: Date.now,
-        index: { expires: '48h' }   // This sets the TTL to 48 hour
+        default: Date.now
     }
 }, {
     toJSON: { getters: true },
