@@ -33,8 +33,8 @@ const accountSchema = new mongoose.Schema({
         set: v => Math.floor(v),
         default: 0
     },
-    time: String,
-    createdAt: {
+    type: String, 
+    timestamp: {
         type: Date,
         default: Date.now
     }
