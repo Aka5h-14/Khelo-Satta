@@ -27,6 +27,11 @@ const cashOut = require("./routes/cashOut");
 
 const app = express();
 
+// Enable trust proxy for production (needed for secure cookies behind reverse proxy)
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
