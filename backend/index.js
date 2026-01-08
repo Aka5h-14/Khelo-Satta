@@ -173,7 +173,7 @@ app.use(session({
     sameSite: 'none',
     maxAge: 60000 * 60,
     domain: process.env.NODE_ENV === 'production' 
-      ? 'khelo.100xdev.me'
+      ? 'khelo.100xdev.tech'
       : undefined
   },
   store: store,
