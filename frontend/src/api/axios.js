@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://khelo-satta-backend.onrender.com/api/'
+  ? 'https://api.khelo.100xdev.tech/api/'
   : 'https://localhost:3000';
 
 const api = axios.create({
