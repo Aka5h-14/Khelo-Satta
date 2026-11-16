@@ -149,6 +149,7 @@ app.use('/api', checkConnections);
 const allowedOrigins = process.env.NODE_ENV === 'production' 
   ? [
       'https://khelo-satta-8hkv.vercel.app', 
+      'https://khelo.akashbuilds.in',
       'https://khelo.100xdev.tech'
     ]
   : ['https://localhost:5173'];
